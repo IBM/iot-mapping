@@ -1,0 +1,1161 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>Quick Start - Leaflet</title>
+	<!-- <link rel="stylesheet" href="scripts/tingle.css"> -->
+	<!-- <script src="scripts/tingle.js" type="text/javascript"></script> -->
+	<!-- <script src="bundle.js"></script> -->
+
+	<!-- <script src="https://cdn.jsdelivr.net/npm/micromodal/dist/micromodal.min.js"></script> -->
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" /> -->
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://unpkg.com/esri-leaflet@2.1.4/dist/esri-leaflet.js"
+    integrity="sha512-m+BZ3OSlzGdYLqUBZt3u6eA0sH+Txdmq7cqA1u8/B2aTXviGMMLOfrKyiIW7181jbzZAY0u+3jWoiL61iLcTKQ=="
+    crossorigin=""></script>
+
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<script src="scripts/mqttws31.js" type="text/javascript"></script>
+
+		<!-- [1] -->
+<style>
+.ui-widget-overlay {
+   background: #AAA url(images/ui-bg_flat_0_aaaaaa_40x100.png) 50% 50% repeat-x;
+   opacity: 2;
+   filter: Alpha(Opacity=30);
+}
+
+body {
+		padding: 0;
+		margin: 0;
+}
+html, body, #mapid {
+		height: 85%;
+		width: 95%;
+		float: middle;
+		margin: auto;
+		margin-top: 50px;
+		z-index: 1;
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 30px;
+    width: 200px;
+    background-color: #f1f1f1;
+}
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+select {
+	display:block;
+	margin:0 auto;
+}
+
+/* begin range.css */
+input[type=range] {
+  -webkit-appearance: none;
+  width: 80%;
+  margin: 13.8px 0;
+}
+input[type=range]:focus {
+  outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 80%;
+  height: 8.4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: #3071a9;
+  border-radius: 1.3px;
+  border: 0.2px solid #010101;
+}
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 36px;
+  width: 16px;
+  border-radius: 3px;
+  background: #f7ffff;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -14px;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #3071a9;
+}
+input[type=range]::-moz-range-track {
+  width: 95%;
+  height: 8.4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: #3071a9;
+  border-radius: 1.3px;
+  border: 0.2px solid #010101;
+}
+input[type=range]::-moz-range-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 36px;
+  width: 16px;
+  border-radius: 3px;
+  background: #f7ffff;
+  cursor: pointer;
+}
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+  background: #3071a9;
+  border: 0.2px solid #010101;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range]::-ms-fill-upper {
+  background: #3071a9;
+  border: 0.2px solid #010101;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range]::-ms-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 36px;
+  width: 16px;
+  border-radius: 3px;
+  background: #f7ffff;
+  cursor: pointer;
+  height: 8.4px;
+}
+input[type=range]:focus::-ms-fill-lower {
+  background: #3071a9;
+}
+input[type=range]:focus::-ms-fill-upper {
+  background: #3071a9;
+}
+/* end range.css */
+
+/* #mapid {
+	z-index: 1;
+} */
+.blue    { background-color: #3b8ec2; }
+.styled-select {
+   /* background: url(http://i62.tinypic.com/15xvbd5.png) no-repeat 96% 0; */
+   height: 29px;
+   overflow: hidden;
+   width: 240px;
+}
+.styled-select select {
+   background: transparent;
+   border: none;
+   font-size: 14px;
+   height: 29px;
+   padding: 5px;
+   width: 268px;
+}
+.semi-square {
+   -webkit-border-radius: 5px;
+   -moz-border-radius: 5px;
+   border-radius: 5px;
+}
+
+.styled-select.slate {
+   /* background: url(http://i62.tinypic.com/2e3ybe1.jpg) no-repeat right center; */
+   height: 34px;
+   width: 240px;
+}
+
+.styled-select.slate select {
+   border: 1px solid #ccc;
+   font-size: 16px;
+   height: 34px;
+   width: 268px;
+}
+
+.leaflet-top, .leaflet-bottom {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.modal {
+	/* display: none; */
+	border: 1px ;
+  border-radius: 25px;
+  padding: 30px;
+	width:400px;
+	width: 50%;
+  margin: 0 auto;
+	z-index: 3;
+	position: fixed;
+  top: 150px;
+	left: 0px;
+	right: 0px;
+  opacity: 0.95;
+	background: white;
+	/* left: 50%;
+	top: 50%; */
+	/* transform: translate(-50%, -50%); */
+
+
+	/* border-margin: 10px; */
+}
+
+.show-modal {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1.0);
+        transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
+</style>
+</head>
+<body>
+
+<div id="user-functions-menu" style="margin-bottom:20px">
+	<button style="float:right" onclick="document.getElementById('files').click()">Import CSV File</button>
+	<input type="file" id="files" name="files[]" multiple style="display:none" />
+	<input id="updateAsset" style="float:right" type="button" onclick="viewModal('updateNodeFormContainer') ; populateAssetOptions()" value="Update Node">
+	<input id="addAsset" style="float:right" type="button" onclick="viewModal('addNodeFormContainer')" value="Add Node">
+
+	<button type="button" style="float:left" onclick="removeAssetPaths()" >Hide all paths</button>
+	<button type="button" style="float:left" onclick="drawAssetPaths()" >Show all paths</button>
+</div>
+</br>
+<div id="mapid" >
+</div>
+
+<div id="addNodeFormContainer" style="display:none" class="modal">
+	<!-- <label for="addNodeForm">Add Node</label> -->
+	<div style="float:middle">
+		<h2> Add Node </h2>
+	</div>
+	<form id="addNodeForm">
+
+	<br>
+	 ID:<br>
+	 <input id="nodeId" type="text" name="id" placeholder="node1"><br>
+	 Longitude:<br>
+	 <input id="nodeLongitude" type="text" name="longitude" placeholder="-12.3456"><br>
+	 Latitude:<br>
+	 <input id="nodeLatitude" type="text" name="latitude" placeholder="-12.3456"><br>
+
+	 Timestamp:<br>
+	 <input id="nodeTimestamp" type="text" name="latitude" placeholder="1534141731"><br>
+	 <br>
+
+	 Sensor Type:<br>
+	 <input id="nodeSensorType" type="text" name="latitude" placeholder="sound"><br>
+	 <br>
+
+	 Sensor Value:<br>
+	 <input id="nodeSensorValue" type="text" name="latitude" placeholder="42"><br>
+	 <br>
+
+	 <!-- Values (Optional, csv):<br>
+	 <input id="nodeValues" type="text" name="latitude"><br> -->
+	 <input type="submit" value="Create" onclick="updateTrackableAsset( $('#nodeId').val(), $('#nodeLongitude').val(), $('#nodeLatitude').val(), Date.now(), $('#nodeSensorType').val(), $('#nodeSensorValue').val() ) ; hideModal('addNodeFormContainer')  ; return false" >
+	 <button type="button" onclick="hideModal('addNodeFormContainer')" >Cancel</button>
+
+	</form>
+</div>
+
+<div id="updateNodeFormContainer" style="display:none" class="modal">
+	<!-- <label for="addNodeForm">Add Node</label> -->
+	<div style="float:middle">
+		<h2> Update Node </h2>
+	</div>
+	<form id="updateNodeForm">
+
+	<br>
+	 ID:<br>
+	 <!-- <input id="nodeId" type="text" name="id" placeholder="node1"><br> -->
+	 <select class="styled-select slate" id="listNodeIds" type="text"><br>
+	 </select>
+	 Longitude:<br>
+	 <input id="nodeLongitude" type="text" name="longitude" placeholder="-12.3456"><br>
+	 Latitude:<br>
+	 <input id="nodeLatitude" type="text" name="latitude" placeholder="-12.3456"><br>
+	 <!-- Values (Optional, csv):<br>
+	 <input id="nodeValues" type="text" name="latitude"><br> -->
+	 <input type="submit" value="Update" onclick="updateTrackableAsset( $('#nodeId').val(), $('#nodeLongitude').val(), $('#nodeLatitude').val(), $('#nodeSensorType').val(), $('#nodeSensorValue').val() ) ; hideModal('updateNodeFormContainer')  ; return false" >
+	 <button type="button" onclick="hideModal('updateNodeFormContainer')" >Cancel</button>
+
+	</form>
+</div>
+
+<div >
+<form id="selectFileColumns" class="modal" style="display:none" >
+	<h1>Select Dataset Columns</h1>
+	<br>
+	ID:<br>
+	<select class="styled-select slate" id="nodeIdSelect" type="text" name="id"><br>
+	</select>
+	<br>
+	Longitude:<br>
+	<select class="styled-select slate" id="nodeLongitudeSelect" type="text" name="longitude">
+	</select>
+	<br>
+	Latitude:<br>
+	<select class="styled-select slate" id="nodeLatitudeSelect" type="text" name="latitude">
+	</select>
+	<br>
+	Timestamp:<br>
+	<select class="styled-select slate" id="nodeTimeSelect" type="text" name="time">
+	</select>
+
+	<!-- TODO1 -->
+	<!-- <input type="submit" value="Create" onclick="return false" > -->
+	<button type="button" onclick="submitFileColumnsForm()" >Submit</button>
+	<button type="button" onclick="hideModal('selectFileColumns')" >Cancel</button>
+
+	<!-- <input type="submit" value="Submit" onclick="submitAssetForm() ; return false" > -->
+
+</form>
+
+
+</div>
+</br>
+<!-- <div class="slidecontainer"> -->
+<!-- <p>0:00</p> -->
+</br>
+</br>
+<div>
+<input type="range" style="float:middle;cursor: pointer;" min="0" max="1440" class="slider" id="timeSlider">
+<p style="font-family:courier;float:right" id="timeView"></p>
+<p style="font-family:courier;float:right" id="sensorView"></p>
+</div>
+<!-- <p>0:00</p> -->
+<!-- <input id="input-time" type="time" name="input-time" value="13:30">
+<input id="input-date" type="date" name="input-date" value=""> -->
+<!-- <p>Time:</p> -->
+
+<!-- <p>Sound Value:</p> -->
+
+
+<!-- <p><button id="addAsset" value="Add Node"></button></p>
+<button id="importDataSet" value="Import Data"></button> -->
+<!-- </div> -->
+
+<!-- <dialog id="favDialog">
+	<form method="dialog">
+		<section>
+			<p><label for="favAnimal">Favorite animal:</label>
+			<select id="favAnimal" name="favAnimal">
+				<option></option>
+				<option>Brine shrimp</option>
+				<option>Red panda</option>
+				<option>Spider monkey</option>
+			</select></p>
+		</section>
+		<menu>
+			<button id="cancel" type="reset">Cancel</button>
+			<button type="submit">Confirm</button>
+		</menu>
+	</form>
+</dialog> -->
+
+
+
+<ul id="nodeList"></ul>
+
+<script>
+
+
+	function toggleModal(id) {
+	    var modal = document.getElementById(id);
+			modal.classList.toggle("show-modal");
+	}
+
+// for (id in animal_data) {
+// 	initTrackableAsset(animal_data[id][0]['location-lat'], animal_data[id][0]['location-long'], id)
+// 	// console.log("id")
+// 	// console.log(id)
+// 	animal_data[id].map( (row, row_idx) => {
+// 		// console.log(animal_data[id][row_idx]['location-long'])
+// 		// /*
+// 		// var newLatLng = new L.LatLng(animal_data[id][row_idx]['location-lat'], animal_data[id][row_idx]['location-long']);
+// 		var newLatLng = [ animal_data[id][row_idx]['location-lat'], animal_data[id][row_idx]['location-long'] ]
+// 		// var newLatLng = new L.LatLng(row['location-long'], row['location-lat']);
+// 		// console.log(newLatLng)
+// 		// assets[id]['marker'].setLatLng(newLatLng).update();
+// 		assets[id]['points'].push(newLatLng)
+// 		// */
+// 		// console.log(Object.keys(row).length)
+// 		// console.log(row_idx)
+// 		if (row_idx == Object.keys(row).length ) {
+// 			console.log("added all points, draw line")
+// 			drawAssetPath(id)
+// 		}
+// 	})
+
+
+	// TODO, get date for
+	var d = new Date();
+	//
+
+	var viewModal = function(id) {
+		console.log(id)
+		document.getElementById(id).style.display = ''
+	}
+	var hideModal = function(id) {
+		console.log("hiding modal: " + id)
+		document.getElementById(id).style.display = 'none'
+	}
+
+	var headers, rows
+
+	var polylines = []
+
+	var populateAssetOptions = function() {
+		document.getElementById('listNodeIds').options.length = 0
+		Object.keys(assets).map( (asset) => {
+			console.log(asset)
+			var opt = document.createElement("option")
+			opt.text = asset
+			opt.value = asset
+			document.getElementById('listNodeIds').options.add(opt)
+		})
+	}
+
+	var removeAssetPaths = function ( id ) {
+		Object.keys(assets).map( (asset) => {
+			removeAssetPath(asset)
+		})
+	}
+
+	var removeAssetPath = function ( id ) {
+		mymap.removeLayer(assets[id]['path'])
+	}
+
+	var drawAssetPath = function( id ) {
+		// var firstpolyline = new L.Polyline( assets[id]['points'], {
+		// 		color: 'red',
+		// 		weight: 3,
+		// 		opacity: 0.5,
+		// 		smoothFactor: 0
+		// });
+		// firstpolyline
+		// assets[id]['marker'].setLatLng( assets[id]['points'][ assets[id]['points'].length - 1 ]  ).update();
+		if (! assets[id]['path']) {
+			assets[id]['path'] = new L.Polyline( assets[id]['points'], {
+					// color: 'red',
+					color: "rgb(" + genRandomNums() + ")",
+					weight: 1,
+					opacity: 0.8,
+					smoothFactor: 0
+			})
+			assets[id]['path'].addTo(mymap);
+		} else {
+			assets[id]['path'].addTo(mymap);
+		}
+		// remove polyline with
+		// mymap.remove(firstpolyline)
+	}
+	var drawAssetPaths = function() {
+		Object.keys(assets).map( (asset, asset_idx) => {
+			drawAssetPath(asset)
+		})
+	}
+
+	var submitFileColumnsForm = function() {
+
+		var nodeIdSelect = document.getElementById('nodeIdSelect')
+		var nodeLongitudeSelect = document.getElementById('nodeLongitudeSelect')
+		var nodeLatitudeSelect = document.getElementById('nodeLatitudeSelect')
+		var nodeTimeSelect = document.getElementById('nodeTimeSelect')
+		hideModal('selectFileColumns')
+		for (i in rows) {
+			var row = rows[i].split(',')
+			// try {
+			//   JSON.parse(row[nodeIdSelect.selectedIndex])
+			// }
+			// catch (error) {
+			// 	console.log(i)
+			// 	console.log(rows[i])
+			// 	console.log(row[nodeIdSelect.selectedIndex])
+			// 	console.error(error);
+			// }
+			if (! assets[JSON.parse(row[nodeIdSelect.selectedIndex])]) {
+				console.log("initializing new asset: " + JSON.parse(row[nodeIdSelect.selectedIndex]))
+				initTrackableAsset(JSON.parse(row[nodeIdSelect.selectedIndex]), row[nodeLatitudeSelect.selectedIndex], row[nodeLongitudeSelect.selectedIndex], row[nodeTimeSelect.selectedIndex])
+			// } else if {
+			//
+			} else {
+				// console.log("appending long/lat to asset")
+				// console.log([ row[nodeLongitudeSelect.selectedIndex], row[nodeLatitudeSelect.selectedIndex] ])
+				assets[JSON.parse(row[nodeIdSelect.selectedIndex])]['points'].push([ row[nodeLatitudeSelect.selectedIndex], row[nodeLongitudeSelect.selectedIndex] ])
+				assets[JSON.parse(row[nodeIdSelect.selectedIndex])]['timestamps'].push(row[nodeTimeSelect.selectedIndex])
+			}
+
+			if (i == (rows.length - 1 )) {
+				console.log("all rows imported")
+				var pointLens = []
+				var assetKeys = Object.keys(assets)
+				console.log(assetKeys)
+				assetKeys.map( (key, idx) => {
+					// console.log(assets[key]['points'].length)
+					pointLens.push(assets[key]['points'].length)
+					console.log("idx")
+					console.log(idx)
+					console.log(assetKeys.length)
+					console.log("pointLens")
+					console.log(pointLens)
+					if (idx == assetKeys.length - 1) {
+						console.log("extracting max")
+						var maxLen = Math.max.apply( Math, pointLens)
+						console.log(maxLen)
+						slider.setAttribute("max", maxLen )
+					}
+				})
+			}
+
+		} // draw all when done
+
+		// for (i in assets) {
+		// 	var assetPoints = assets[]
+		// }
+		// var assetKeys = Object.keys(assets)
+		// assetKeys.map( (key, idx) => {
+		// 	console.log(assets[key]['points'].length)
+		// 	pointLens.push(assets[key]['points'].length)
+		// 	console.log("idx")
+		// 	console.log(idx)
+		// 	if (idx == assetKeys.length) {
+		// 		var maxLen = Math.max.apply( Math, pointLens)
+		// 		slider.setAttribute("max", maxLen )
+		// 	}
+		// })
+		//assets[id]['points'].length - 1)
+		// Math.max.apply(Math, array.map(function(o) { return o.y; }))
+		slider.oninput = function() {
+			for (id in assets) {
+				console.log(id)
+				console.log(this.value)
+				if (assets[id]['points'][this.value]) {
+					console.log("updating " +  id + " to " + assets[id]['points'][this.value].toString())
+					updateTrackableAsset( id, assets[id]['points'][this.value][0], assets[id]['points'][this.value][1], id)
+				}
+				if (assets[id]['timestamps'][this.value]) {
+					document.getElementById("timeView").innerHTML = assets[id]['timestamps'][this.value]
+				}
+			}
+				// nodes['node1'].setRadius(this.value)
+				// nodes['node1'].setRadius( sampleSensorData[this.value]['d']['sound'] / 10 )
+				// document.getElementById("timeView").innerHTML = sampleSensorData[this.value]['d']['timestamp']
+				// document.getElementById("sensorView").innerHTML = sampleSensorData[this.value]['d']['sound']
+				// output.innerHTML = this.value;
+		}
+		// nodeIdSelect.selectedIndex
+		// headers
+		// rows
+	}
+	// copied from https://www.html5rocks.com/en/tutorials/file/dndfiles/
+	function handleFileSelect(evt) {
+		var files = evt.target.files; // FileList object
+
+		// Loop through the FileList and render image files as thumbnails.
+		for (var i = 0, f; f = files[i]; i++) {
+
+			// Only process image files.
+			// if (!f.type.match('image.*')) {
+			// 	continue;
+			// }
+			console.log(evt)
+			var reader = new FileReader();
+			reader.readAsText(f)
+
+			// Closure to capture the file information.
+			reader.onload = (function(event) {
+				console.log("file loaded")
+				console.log(event)
+				// var csv = event.target.result
+				// console.log(csv)
+				// return function(e) {
+				// 	// Render thumbnail.
+				// 	console.log(theFile)
+					console.log("parsing as csv")
+					var csv = event.originalTarget.result.split('\n')
+					console.log("extracting headers")
+					headers = csv[0].split(',')
+					console.log(headers)
+					rows = csv.slice(1, csv.length - 1) // each row needs to be split by comma ... TODO, the -1 here assumes last row is empty, need a better way to validate here
+
+					// createOptionsList()
+					var nodeIdSelect = document.getElementById('nodeIdSelect')
+					var nodeLongitude = document.getElementById('nodeLongitudeSelect')
+					var nodeLatitudeSelect = document.getElementById('nodeLatitudeSelect')
+					var nodeTimeSelect = document.getElementById('nodeTimeSelect')
+
+					var selects = document.getElementsByTagName('select');
+					// var optionsList = createOptionsList( headers ).join("")
+					// console.log(optionsList)
+					viewModal('selectFileColumns')
+					for (var i = 0; i < selects.length; i++) {
+						for (var j = 0; j < headers.length; j++) {
+							console.log("appending header: " + headers[j] )
+							var opt = document.createElement("option");
+							opt.text = headers[j]
+							opt.value = headers[j]
+							if (opt.text) {
+								selects[i].options.add(opt)
+								// for (var i = 0; i < selects.length; i++) {
+								// 	console.log("appending opt")
+								// 	console.log(opt)
+								// 	console.log(selects[i])
+								// 	// selects[i].appendChild(opt)
+								//
+								// 	// nodeIdSelect.appendChild(opt)
+								// 	// nodeLongitude.appendChild(opt)
+								// 	// nodeLatitudeSelect.appendChild(opt)
+								// }
+							}
+					}}
+
+
+
+
+
+						// $( 'select[name="nodeIdSelect"]' ).append( "<option value='" + headers[i] + "'>" + headers[i] + "</option>" );
+						// document.getElementById('nodeIdSelect').append( "<option value='" + headers[i] + "'>" + headers[i] + "</option>")
+						// document.getElementById('nodeLongitudeSelect').append( "<option value='" + headers[i] + "'>" + headers[i] + "</option>")
+						// document.getElementById('nodeLatitude').append( "<option value='" + headers[i] + "'>" + headers[i] + "</option>")
+					// }
+
+
+				// 	// var span = document.createElement('span');
+				// 	// span.innerHTML = ['<img class="thumb" src="', e.target.result,
+				// 	// 									'" title="', escape(theFile.name), '"/>'].join('');
+				// 	// document.getElementById('list').insertBefore(span, null);
+				// };
+			});
+		}
+	}
+	function createOptionsList(headers) {
+		var options = []
+		for (var i = 0; i < headers.length; i++) {
+			console.log("appending header: " + headers )
+			var option = document.createElement("option");
+			option.text = headers[i]
+			option.value = headers[i]
+			if (option.text) {
+				options.push(option)
+			}
+		}
+		if (options.length == headers.length) {
+			return options
+		}
+	}
+
+	document.getElementById('files').addEventListener('change', handleFileSelect, false);
+	// when csv file is uploaded
+	// 1. ask user which columns they want to keep. so they're specifying longitude, latitude, and optional sensor values
+	// 2.
+	/*
+	var fileReader = new FileReader();
+	function getFile(inputFile) {
+	let file = inputFile.files[0];
+	fileReader.readAsText(file);
+	}
+	function readFile(evt) {
+	let parsed = csvJSON(evt.target.result);
+	return parsed;
+	}
+	*/
+
+	// generate list of nodes when one gets added or removed
+	var renderList = function() {
+		var ul = document.getElementById("nodeList");
+		ul.innerHTML = ''
+		var assetKeys = Object.keys(assets)
+		for (idx in assetKeys) {
+		  var li = document.createElement("li");
+			li.setAttribute('id', assetKeys[idx]);
+			// li.setAttribute('lastLocation',  );
+			li.appendChild(document.createTextNode(assetKeys[idx]))
+
+			ul.appendChild(li);
+		}
+	}
+
+	// var submitAssetForm = function() {
+	// 	initTrackableAsset( $('#nodeId').val(), $('#nodeLongitude').val(),  $('#nodeLatitude').val() )
+	// }
+
+	var initMQTTClient = function() {
+		var mqttCreds = {
+        IOT_DEVICE_ID: "965d11de", //"<%= process.env.IOT_DEVICE_ID %>",
+        IOT_AUTH_TOKEN: 'fVc4nvnIRX7YE1QO!c', //"<%= process.env.IOT_AUTH_TOKEN %>",
+        IOT_API_KEY: 'a-agf5n9-locl4crjy8', //"<%= process.env.IOT_API_KEY %>",
+        IOT_ORG_ID: "agf5n9", //"<%= process.env.IOT_ORG_ID %>",
+        IOT_DEVICE_TYPE: "MQTTDevice", //"<%= process.env.IOT_DEVICE_TYPE %>"
+				IOT_EVENT_TYPE: "assetMapper"
+    }
+		var watson_channel = 'iot-2/type/' + mqttCreds.IOT_DEVICE_TYPE + '/id/' + mqttCreds.IOT_DEVICE_ID + '/evt/'+  mqttCreds.IOT_EVENT_TYPE + '/fmt/json'
+		var cleanSession = true;
+
+		var subscribeOptions = {
+			onSuccess: function() {
+				console.log("subscription set")
+				mqttClient.onMessageArrived = function (messageObj) {
+					var message = JSON.parse(messageObj.payloadString).d
+					console.log( message)
+					if ( ! assets[message['node_id']] ) {
+						initTrackableAsset(message['node_id'], message['long'], message['lat'] ) // TODO, clean this up, it's hacky
+					}
+					if (message['sensor']) {
+						updateTrackableAsset(message['node_id'], message['long'], message['lat'], Object.keys(message['sensor'])[0], message['sensor'][Object.keys(message['sensor'])[0]] ) // TODO, clean this up, it's hacky
+					} else {
+						updateTrackableAsset(message['node_id'], message['long'], message['lat'])
+					}
+				}
+			}
+		}
+
+		var options = {
+      timeout: 40,
+      cleanSession: cleanSession,
+      useSSL: false,
+      userName: mqttCreds.IOT_API_KEY,
+      password: mqttCreds.IOT_AUTH_TOKEN,
+			onSuccess: function () {
+				console.log("mqtt client connected")
+				mqttClient.subscribe( watson_channel, subscribeOptions )
+			},
+			onFailure: function (err) {
+				console.log("mqtt client failed to connect")
+				console.log(options)
+				console.log(err)
+			}
+		}
+		var mqtt_host = mqttCreds.IOT_ORG_ID + '.messaging.internetofthings.ibmcloud.com'
+		var mqtt_port = 1883
+		var useTLS = true // true ssl
+		var mqttClient = new Messaging.Client(mqtt_host, mqtt_port, "a:" + mqttCreds.IOT_ORG_ID + ":" + "client" + parseInt(Math.random() * 100, 10));
+		mqttClient.connect(options)
+	}
+
+	var loadData = function() {
+
+	}
+
+
+// $( function() {
+// 	$( "#dialog" ).dialog({
+// 		modal: true,
+// 		buttons: {
+// 				 Yes: function () {
+// 						 item.remove();
+// 						 $(this).dialog("close");
+// 				 },
+// 				 No: function () {
+// 						 $(this).dialog("close");
+// 				 }
+// 		 },
+// 		 close: function (event, ui) {
+// 				 $(this).remove();
+// 		 }
+// 	});
+// } );
+
+	// var mymap = L.map('mapid').setView([33.999959, -118.317367], 20);
+	initMQTTClient()
+	var mymap = L.map("mapid").setView([34.000037, -118.317471], 100);
+  L.esri.basemapLayer("Topographic").addTo(mymap);
+
+	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 100,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox.streets'
+	}).addTo(mymap);
+
+	// TODO
+	// add static labels to circle
+	// https://gis.stackexchange.com/questions/182880/leaflet-js-add-text-to-circles
+
+	// remove circles for redraw
+  // https://gis.stackexchange.com/questions/240169/leaflet-onclick-add-remove-circles
+
+	// add icon of end node to circle center
+	// https://stackoverflow.com/questions/45453963/use-a-small-circle-icon-marker-instead-of-default-marker-icon-with-polyline
+	// add sensor icon on outside of circle?
+
+
+	var nodes = {}
+	// nodes['node1'] = drawEndNode("node1", 33.999891, -118.317536, "sound", 5)
+	// drawEndNode("node1", 33.999891, -118.317536, "sound", 5)
+	/*
+	initTrackableAsset("node2", 33.999891, -118.317536, "sound", 5)
+	nodes['node1']['circle'].setRadius(14)
+
+	initTrackableAsset("node2", 33.999891, -118.317536)
+	// updateTrackableAsset(33.99990, -118.318, "node2")
+	// updateTrackableAsset(34.02, -117.32, "node2")
+	updateTrackableAsset("node2", 34.000051, -118.317537, "sound", 20)
+	updateTrackableAsset("node2", 34.000057, -118.317392)
+	updateTrackableAsset("node2", 34.000063, -118.317183)
+	updateTrackableAsset("node2", 34.002073, -118.4)
+	*/
+
+	var assets = {}
+	var assetPoints = {}
+
+
+	/*
+	var initTrackableAsset = function (id, long, lat, type = undefined, val = undefined) {
+		// assets[id] = L.marker([long, lat]).addTo(mymap).bindPopup("<b>LoRA Asset" + id + " </b><br />").openPopup();
+		assets[id] = {
+			marker: L.marker([long, lat]).addTo(mymap).bindPopup("<b>LoRA Asset: " + id + " </b><br />").openPopup(),
+			points: [ new L.LatLng(long, lat) ]
+		}
+	  // assetPoints[id] = [ new L.LatLng(long, lat) ]
+		// return L.marker([long, lat]).addTo(mymap).bindPopup("<b>LoRA Node A1</b><br />").openPopup();
+	}
+	*/
+
+	var initTrackableAsset = function(id, long, lat, time, type = undefined, val = undefined) {
+		// long = 33.999891
+		// lat = -118.317536
+		// val = 5
+		// type = "sound"
+		// id = "node1"
+		console.log("initializing asset: " + id)
+		var node = {
+			marker: L.marker([long, lat]).addTo(mymap).bindPopup("<b>" + id +"</b>").openPopup(),
+			points: [ new L.LatLng(long, lat) ],
+			timestamps: [ time ]
+		}
+		// node.marker = L.marker([long, lat]).addTo(mymap).bindPopup("<b>LoRA Node A1</b><br />").openPopup();
+
+		// if associated sensor data included, create a circle showing sensor value. TODO, allow for multiple sensor value types
+		if (type) {
+			var node1 = Object.assign ({
+				circle: L.circle([long, lat], val, {
+					color: 'red',
+					fillColor: '#f03',
+					fillOpacity: 0.1
+				}).addTo(mymap).bindPopup("LoRA Node: " + id)
+			}, node)
+			assets[id] = node1
+			renderList()
+			return node1
+		} else {
+			assets[id] = node
+			renderList()
+			return node
+		}
+		/*
+		// 	node.circle = L.circle([long, lat], val, {
+		// 		color: 'red',
+		// 		fillColor: '#f03',
+		// 		fillOpacity: 0.1
+		// 	}).addTo(mymap).bindPopup("LoRA Node: " + id);
+		// }
+		//
+		// if (node.marker && node.circle) {
+		// 	return node
+		// } else if (node.marker && type == undefined) {
+		//
+		// }
+		//
+		// return {
+		// 	marker: L.marker([long, lat]).addTo(mymap).bindPopup("<b>LoRA Node A1</b><br />").openPopup();
+		// 	circle: L.circle([long, lat], val, {
+		// 		color: 'red',
+		// 		fillColor: '#f03',
+		// 		fillOpacity: 0.1
+		// 	}).addTo(mymap).bindPopup("LoRA Node: " + id);
+		// }
+		*/
+	}
+	// TODO, this and "init" function should just take id and an options object
+	var updateTrackableAsset = function (id, long, lat, time, type = undefined, val = undefined) {
+		console.log("updating asset: " + id)
+		if ( ! assets[id] ) {
+			console.log("asset doesn't exist, creating: " + id)
+			var asset = initTrackableAsset(id, long, lat, time, type, val)
+		} else {
+			console.log("loading asset: " + id)
+			var asset = assets[id]
+		}
+		var newLatLng = new L.LatLng(long, lat);
+		// console.log(id)
+		asset['marker'].setLatLng(newLatLng).update();
+		asset['points'].push(newLatLng)
+		asset['timestamps'].push(time)
+		if (asset['circle']) {
+				asset['circle'].setRadius( val )
+				asset['circle'].setLatLng( newLatLng )
+		}
+		console.log("asset location updated")
+		// var firstpolyline = new L.Polyline( assets['node2']['points'], {
+		// 		color: 'red',
+		// 		weight: 3,
+		// 		opacity: 0.5,
+		// 		smoothFactor: 0
+		// });
+		// firstpolyline.addTo(mymap);
+	}
+
+	var genRandomNums = function() {
+		return [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)].join(',')
+	}
+
+
+
+
+
+	// var animal_data = JSON.parse('map_vals');
+
+	function loadJSON(callback) {
+		 var xobj = new XMLHttpRequest();
+		 xobj.overrideMimeType("application/json");
+		 // xobj.open('GET', './map_vals.json', true); // Replace 'my_data' with the path to your file
+		 xobj.open('GET', '/animal_data', true); // Replace 'my_data' with the path to your file
+		 xobj.onreadystatechange = function () {
+					 if (xobj.readyState == 4 && xobj.status == "200") {
+						 // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+						 // return xobj.responseText
+						 callback(xobj.responseText);
+					 }
+		 };
+		 xobj.send(null);
+	}
+
+	var animal_data
+	loadJSON(function(response) {
+	   // Parse JSON string into object
+     animal_data = JSON.parse(response);
+  });
+
+
+function drawAnimalPaths( ) {
+
+	for (id in assets) {
+		console.log(id)
+		console.log(assets[id]['points'].length)
+		// if (slider.getAttribute("max") < assets[id]['points'].length ) {
+		// 	console.log("updating slider max to ")
+		// 	console.log(assets[id]['points'].length - 1)
+		//   slider.setAttribute("max", assets[id]['points'].length - 1)
+		// }
+	}
+
+	// slider.setAttribute("max", sampleSensorData.length - 1)
+	slider.oninput = function() {
+		for (id in assets) {
+			console.log(id)
+			console.log(this.value)
+			if (assets[id]['points'][this.value]) {
+				assets[id]['marker'].setLatLng( assets[id]['points'][this.value] ).update();
+				console.log("updating " +  id + " to " + assets[id]['points'][this.value].toString())
+				// updateTrackableAsset( id, assets[id]['points'][this.value][0], assets[id]['points'][this.value][1], id)
+			}
+			// if (assets[id]['circle'][this.value]) {
+			// }
+		}
+			// nodes['node1'].setRadius(this.value)
+			// nodes['node1'].setRadius( sampleSensorData[this.value]['d']['sound'] / 10 )
+			// document.getElementById("timeView").innerHTML = sampleSensorData[this.value]['d']['timestamp']
+			// document.getElementById("sensorView").innerHTML = sampleSensorData[this.value]['d']['sound']
+			// output.innerHTML = this.value;
+	}
+
+	for (id in animal_data) {
+		initTrackableAsset(animal_data[id][0]['location-lat'], animal_data[id][0]['location-long'], id)
+		// console.log("id")
+		// console.log(id)
+		animal_data[id].map( (row, row_idx) => {
+			// console.log(animal_data[id][row_idx]['location-long'])
+			// /*
+			// var newLatLng = new L.LatLng(animal_data[id][row_idx]['location-lat'], animal_data[id][row_idx]['location-long']);
+			var newLatLng = [ animal_data[id][row_idx]['location-lat'], animal_data[id][row_idx]['location-long'] ]
+			// var newLatLng = new L.LatLng(row['location-long'], row['location-lat']);
+			// console.log(newLatLng)
+			// assets[id]['marker'].setLatLng(newLatLng).update();
+			assets[id]['points'].push(newLatLng)
+			// */
+			// console.log(Object.keys(row).length)
+			// console.log(row_idx)
+			if (row_idx == Object.keys(row).length ) {
+				console.log("added all points, draw line")
+				drawAssetPath(id)
+			}
+		})
+		// for ( row_idx in animal_data[id] ) {
+		// 	updateTrackableAsset(animal_data[id][row_idx]['location-lat'], animal_data[id][row_idx]['location-long'], id)
+		// }
+		// console.log(id)
+		// console.log(animal_data[id])
+		// initTrackableAsset(33.999891, -118.317536, "node2")
+	}
+}
+
+
+
+	// $.getJSON( "./map_vals.json", function( data ) {
+	//   var items = [];
+	//   $.each( data, function( key, val ) {
+	//     items.push( "<li id='" + key + "'>" + val + "</li>" );
+	//   });
+	//
+	//   $( "<ul/>", {
+	//     "class": "my-new-list",
+	//     html: items.join( "" )
+	//   }).appendTo( "body" );
+	// });
+
+
+
+
+	// nodes['node1'].setStyle({
+	// 	weight: 1,
+	// 	color: 'blue'
+	// })
+
+
+	/*
+	L.marker([33.999891, -118.317536]).addTo(mymap)
+		.bindPopup("<b>LoRA Node A1</b><br />").openPopup();
+
+	L.circle([33.999891, -118.317536], 5, {
+		color: 'red',
+		fillColor: '#f03',
+		fillOpacity: 0.1
+	}).addTo(mymap).bindPopup("LoRA Node A1");
+
+
+	L.marker([33.999866, -118.317251]).addTo(mymap)
+		.bindPopup("<b>LoRA Node A2</b><br />").openPopup();
+
+	L.circle([33.999866, -118.317251], 6.5, {
+		color: 'red',
+		fillColor: '#f03',
+		fillOpacity: 0.1
+	}).addTo(mymap).bindPopup("LoRA Node A2");
+
+	L.circle([33.999866, -118.317251], 200, {
+		color: 'blue',
+		fillColor: '#77a7f4',
+		fillOpacity: 0.1
+	}).addTo(mymap) //.bindPopup("LoRA Gateway");
+	*/
+// 33.999866, -118.317251
+
+	// L.polygon([
+	// 	[34.000037, -118.317471],
+	// 	[35.000037, -118.42],
+	// 	[34.000037, -118.53]
+	// ]).addTo(mymap).bindPopup("I am a polygon.");
+
+
+	var popup = L.popup();
+
+	function onMapClick(e) {
+		popup
+			.setLatLng(e.latlng)
+			.setContent("You clicked the map at " + e.latlng.toString())
+			.openOn(mymap);
+	}
+
+	mymap.on('click', onMapClick);
+
+	// /*
+
+	var slider = document.getElementById("timeSlider");
+	// var output = document.getElementById("demo");
+	// output.innerHTML = slider.value; // Display the default slider value
+
+	// Update the current slider value (each time you drag the slider handle)
+	slider.oninput = function() {
+		  // console.log(this.value)
+			// nodes['node1'].setRadius(this.value)
+			// nodes['node1'].setRadius( sampleSensorData[this.value]['d']['sound'] / 10 )
+			Object.keys(assets).map( (id, idx) => {
+				// TODO, add logic to adjust circles
+				// if (assets[key]['circle']) && (assets[key]['sensors'][this.value]) {
+				// 	assets[key]['circle'].setRadius( this.value)
+				// }
+
+				if (assets[id]['points'][this.value]) {
+					assets[id]['marker'].setLatLng( assets[id]['points'][this.value] ).update();
+					console.log("updating " +  id + " to " + assets[id]['points'][this.value].toString())
+					// updateTrackableAsset( id, assets[id]['points'][this.value][0], assets[id]['points'][this.value][1], id)
+				}
+
+				// assets[key]['circle'].
+				// node.setRadius( this.value )
+			})
+			document.getElementById("timeView").innerHTML = assets[id]['timestamps'][this.value] //sampleSensorData[this.value]['d']['timestamp']
+
+			// TODO, figure out sensors part
+			//document.getElementById("sensorView").innerHTML = assets[id]['sensors'][][this.value] // sampleSensorData[this.value]['d']['sound']
+	    // output.innerHTML = this.value;
+	}
+	// */
+	var sampleSensorData = [
+		{"d":{"sound":65,"timestamp":"2018-06-30T06:49:55.174Z"}},
+		{"d":{"sound":81,"timestamp":"2018-06-30T06:50:55.174Z"}},
+		{"d":{"sound":69,"timestamp":"2018-06-30T06:51:55.174Z"}},
+		{"d":{"sound":66,"timestamp":"2018-06-30T06:52:55.174Z"}},
+		{"d":{"sound":65,"timestamp":"2018-06-30T06:53:55.174Z"}},
+		{"d":{"sound":81,"timestamp":"2018-06-30T06:54:55.174Z"}},
+		{"d":{"sound":69,"timestamp":"2018-06-30T06:55:55.174Z"}},
+		{"d":{"sound":66,"timestamp":"2018-06-30T06:56:55.174Z"}},
+		{"d":{"sound":65,"timestamp":"2018-06-30T06:57:55.174Z"}},
+		{"d":{"sound":81,"timestamp":"2018-06-30T06:58:55.174Z"}},
+		{"d":{"sound":69,"timestamp":"2018-06-30T06:59:55.174Z"}},
+		{"d":{"sound":66,"timestamp":"2018-06-30T07:00:55.174Z"}},
+		{"d":{"sound":69,"timestamp":"2018-06-30T07:01:55.174Z"}},
+		{"d":{"sound":82,"timestamp":"2018-06-30T07:02:55.174Z"}},
+		{"d":{"sound":69,"timestamp":"2018-06-30T07:03:55.174Z"}},
+		{"d":{"sound":66,"timestamp":"2018-06-30T07:04:55.174Z"}},
+		{"d":{"sound":65,"timestamp":"2018-06-30T07:05:55.174Z"}},
+		{"d":{"sound":81,"timestamp":"2018-06-30T07:06:55.174Z"}},
+		{"d":{"sound":69,"timestamp":"2018-06-30T07:07:55.174Z"}},
+		{"d":{"sound":66,"timestamp":"2018-06-30T07:08:55.174Z"}},
+		{"d":{"sound":65,"timestamp":"2018-06-30T07:09:55.174Z"}},
+		{"d":{"sound":82,"timestamp":"2018-06-30T07:10:55.174Z"}},
+		{"d":{"sound":68,"timestamp":"2018-06-30T07:11:55.174Z"}},
+		{"d":{"sound":120,"timestamp":"2018-06-30T07:12:55.174Z"}},
+		{"d":{"sound":69,"timestamp":"2018-06-30T07:13:55.174Z"}},
+		{"d":{"sound":82,"timestamp":"2018-06-30T07:14:55.174Z"}},
+		{"d":{"sound":69,"timestamp":"2018-06-30T07:15:55.174Z"}},
+		{"d":{"sound":82,"timestamp":"2018-06-30T07:16:55.174Z"}},
+		{"d":{"sound":69,"timestamp":"2018-06-30T07:17:55.174Z"}},
+		{"d":{"sound":61,"timestamp":"2018-06-30T07:18:55.174Z"}}
+	]
+	slider.setAttribute("max", sampleSensorData.length - 1)
+
+
+
+	// for (i in sampleSensorData) {
+	// 	console.log("setting radius")
+	// 	console.log(sampleSensorData[i]['d']['sound'])
+	// 	nodes['node1'].setRadius(sampleSensorData[i]['d']['sound'])
+	// }
+
+	// sampleAssetData = [
+	//
+	// ]
+</script>
+</body>
+</html>
