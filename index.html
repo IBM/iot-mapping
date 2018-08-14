@@ -917,12 +917,10 @@ var hackerList = new List('hacker-list', options);
 	loadJSON(function(response) {
 	   // Parse JSON string into object
 		 console.log("Loading MQTT credentials")
-		 console.log(response)
      initMQTTClient(JSON.parse(response))
   })
 
 	var initMQTTClient = function(mqttCreds) {
-		console.log(mqttCreds)
 		var watson_channel = 'iot-2/type/' + mqttCreds.IOT_DEVICE_TYPE + '/id/' + mqttCreds.IOT_DEVICE_ID + '/evt/'+  mqttCreds.IOT_EVENT_TYPE + '/fmt/json'
 		var cleanSession = true;
 

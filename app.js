@@ -42,7 +42,6 @@ app.get('/', function (req, res) {
 
 
 app.get('/mqtt_creds', function (req, res) {
-  console.log(mqttCreds)
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify(mqttCreds));
 });

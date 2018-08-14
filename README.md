@@ -20,7 +20,7 @@ When the reader has completed this Code Pattern, they will understand how to:
 * View the status of IoT assets in a map
 
 <p align="center">
-<img src="https://i.imgur.com/2t4m2m1.png">
+<img src="https://i.imgur.com/6DFEiFB.png">
 </p>
 
 <!-- TODO, add picture here -->
@@ -40,7 +40,7 @@ When the reader has completed this Code Pattern, they will understand how to:
 
 2. Express backend subscribes to Watson IoT Platform channel corresponding to one or more end nodes.
 
-3. End Node repeatedly publishes JSON object containing location, time, and sensor data to Watson IoT Platform
+3. End Node continuously publishes JSON object containing location, time, and sensor data to Watson IoT Platform
 
 ```
 {
@@ -87,7 +87,6 @@ Start the application with
 ```
 node app.js
 ```
-
 
 <!--Update this section-->
 ## Included components
