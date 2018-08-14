@@ -56,7 +56,7 @@ html, body, #mapid {
     width: 200px;
     background-color: #f1f1f1;
 		border-style: solid;
-		border-radius: 25px;
+		border-radius: 1px;
 	  /* display: inline; */
 		float: left;
 
@@ -167,7 +167,8 @@ input[type=text] {
 }
 button {
 	border-radius: 4px;
-  color: blue;
+  color: #000000;
+	background-color: #b3d9ff;
 	border: none;
 	font-size: 16px;
 	padding: 15px;
@@ -322,7 +323,7 @@ input[type=range]:focus::-ms-fill-upper {
   margin: 0 auto;
 	z-index: 3;
 	position: fixed;
-  top: 150px;
+  top: 180px;
 	left: 0px;
 	right: 0px;
   opacity: 0.95;
@@ -350,8 +351,8 @@ input[type=range]:focus::-ms-fill-upper {
 	<input type="file" id="files" name="files[]" multiple style="display:none" />
 	<button type="button" id="updateAsset" style="float:right" onclick="viewModal('updateNodeFormContainer') ; populateAssetOptions()"> Update Node </button>
 	<button type="button" id="addAsset" style="float:right" onclick="viewModal('addNodeFormContainer')">Add Node</button>
-	<button type="button" style="float:left" onclick="removeAssetPaths()" >Hide all paths</button>
-	<button type="button" style="float:left" onclick="drawAssetPaths()" >Show all paths</button>
+	<button type="button" style="float:left" onclick="removeAssetPaths()" >Hide asset paths</button>
+	<button type="button" style="float:left" onclick="drawAssetPaths()" >Show asset paths</button>
 </div>
 </br>
 <div id="mapid" >
@@ -610,6 +611,8 @@ var hackerList = new List('hacker-list', options);
 		// });
 		// firstpolyline
 		// assets[id]['marker'].setLatLng( assets[id]['points'][ assets[id]['points'].length - 1 ]  ).update();
+
+		// TODO, color of associated marker should change to match line
 		if (! assets[id]['path']) {
 			assets[id]['path'] = new L.Polyline( assets[id]['points'], {
 					// color: 'red',
@@ -626,6 +629,7 @@ var hackerList = new List('hacker-list', options);
 		// mymap.remove(firstpolyline)
 	}
 	var drawAssetPaths = function() {
+
 		Object.keys(assets).map( (asset, asset_idx) => {
 			drawAssetPath(asset)
 		})
@@ -893,16 +897,32 @@ var hackerList = new List('hacker-list', options);
 	// var submitAssetForm = function() {
 	// 	initTrackableAsset( $('#nodeId').val(), $('#nodeLongitude').val(),  $('#nodeLatitude').val() )
 	// }
+	function loadJSON(callback) {
+		 var xobj = new XMLHttpRequest();
+		 xobj.overrideMimeType("application/json");
+		 // xobj.open('GET', './map_vals.json', true); // Replace 'my_data' with the path to your file
+		 xobj.open('GET', '/mqtt_creds', true); // Replace 'my_data' with the path to your file
+		 xobj.onreadystatechange = function () {
+					 if (xobj.readyState == 4 && xobj.status == "200") {
+						 // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+						 // return xobj.responseText
+						 callback(xobj.responseText);
+					 }
+		 };
+		 xobj.send(null);
+	}
 
-	var initMQTTClient = function() {
-		var mqttCreds = {
-        IOT_DEVICE_ID: "965d11de", //"<%= process.env.IOT_DEVICE_ID %>",
-        IOT_AUTH_TOKEN: 'fVc4nvnIRX7YE1QO!c', //"<%= process.env.IOT_AUTH_TOKEN %>",
-        IOT_API_KEY: 'a-agf5n9-locl4crjy8', //"<%= process.env.IOT_API_KEY %>",
-        IOT_ORG_ID: "agf5n9", //"<%= process.env.IOT_ORG_ID %>",
-        IOT_DEVICE_TYPE: "MQTTDevice", //"<%= process.env.IOT_DEVICE_TYPE %>"
-				IOT_EVENT_TYPE: "assetMapper"
-    }
+	var animal_data
+
+	loadJSON(function(response) {
+	   // Parse JSON string into object
+		 console.log("Loading MQTT credentials")
+		 console.log(response)
+     initMQTTClient(JSON.parse(response))
+  })
+
+	var initMQTTClient = function(mqttCreds) {
+		console.log(mqttCreds)
 		var watson_channel = 'iot-2/type/' + mqttCreds.IOT_DEVICE_TYPE + '/id/' + mqttCreds.IOT_DEVICE_ID + '/evt/'+  mqttCreds.IOT_EVENT_TYPE + '/fmt/json'
 		var cleanSession = true;
 
@@ -971,7 +991,6 @@ var hackerList = new List('hacker-list', options);
 // } );
 
 	// var mymap = L.map('mapid').setView([33.999959, -118.317367], 20);
-	initMQTTClient()
 	var mymap = L.map("mapid").setView([34.000037, -118.317471], 100);
   L.esri.basemapLayer("Topographic").addTo(mymap);
 
@@ -1120,27 +1139,6 @@ var hackerList = new List('hacker-list', options);
 
 
 	// var animal_data = JSON.parse('map_vals');
-
-	function loadJSON(callback) {
-		 var xobj = new XMLHttpRequest();
-		 xobj.overrideMimeType("application/json");
-		 // xobj.open('GET', './map_vals.json', true); // Replace 'my_data' with the path to your file
-		 xobj.open('GET', '/animal_data', true); // Replace 'my_data' with the path to your file
-		 xobj.onreadystatechange = function () {
-					 if (xobj.readyState == 4 && xobj.status == "200") {
-						 // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-						 // return xobj.responseText
-						 callback(xobj.responseText);
-					 }
-		 };
-		 xobj.send(null);
-	}
-
-	var animal_data
-	loadJSON(function(response) {
-	   // Parse JSON string into object
-     animal_data = JSON.parse(response);
-  });
 
 
 
@@ -1305,6 +1303,10 @@ function drawAnimalPaths( ) {
 					console.log("updating " +  id + " to " + assets[id]['points'][this.value].toString())
 					// updateTrackableAsset( id, assets[id]['points'][this.value][0], assets[id]['points'][this.value][1], id)
 				}
+				// TODO, add sensor values array
+				// if (assets[id]['circle'][this.value]) {
+				// 	assets[id]['circle'].setRadius(   )
+				// }
 
 				// assets[key]['circle'].
 				// node.setRadius( this.value )

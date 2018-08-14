@@ -25,14 +25,24 @@ for (row in animal_data) {
 //       // return element.age >= 10;
 //     })
 // }
+require('dotenv').config()
+var mqttCreds = {
+  IOT_DEVICE_ID: process.env.IOT_DEVICE_ID,
+  IOT_AUTH_TOKEN: process.env.IOT_AUTH_TOKEN,
+  IOT_API_KEY: process.env.IOT_API_KEY,
+  IOT_ORG_ID: process.env.IOT_ORG_ID,
+  IOT_DEVICE_TYPE: process.env.IOT_DEVICE_TYPE,
+  IOT_EVENT_TYPE: process.env.IOT_EVENT_TYPE
+}
 
-var mqttCreds = fs.readFileSync('.iotenv')
+//fs.readFileSync('.iotenv')
 app.get('/', function (req, res) {
   res.sendFile('index.html' , { root : __dirname});
 });
 
 
 app.get('/mqtt_creds', function (req, res) {
+  console.log(mqttCreds)
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify(mqttCreds));
 });

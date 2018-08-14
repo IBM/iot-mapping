@@ -19,6 +19,10 @@ When the reader has completed this Code Pattern, they will understand how to:
 * Persist data in a Cloudant Database
 * View the status of IoT assets in a map
 
+<p align="center">
+<img src="https://i.imgur.com/2t4m2m1.png">
+</p>
+
 <!-- TODO, add picture here -->
 <!--Remember to dump an image in this path-->
 
@@ -32,7 +36,7 @@ When the reader has completed this Code Pattern, they will understand how to:
 
 5. If form data is valid, user should be able to execute Chaincode operations, view individual blocks and their data, and request state of registered Assets -->
 
-1. User registers an "end node" in the mapping UI, which represents a trackable asset capable of publishing location and sensor data.
+1. User registers an "end node" via the mapping UI or a MQTT message. This end node represents a trackable asset capable of publishing location and sensor data.
 
 2. Express backend subscribes to Watson IoT Platform channel corresponding to one or more end nodes.
 
@@ -78,7 +82,6 @@ Install the listed node packages by running `npm install` in the project root di
 ```
 npm install
 ```
-
 
 Start the application with
 ```
@@ -215,7 +218,7 @@ The result will give us an API Key and Authentication Token. These can be suppli
 
 ## 5. Obtain service credentials
 
-Now that we've instantiated our Watson IoT Platform service instance and the corresponding MQTT credentials, we'll next need to place the credentials into a `.env` file. This will allow for the application to authenticate to the MQTT broker and listen for updates from registered IoT devices.
+Now that we've instantiated our Watson IoT Platform service instance and the corresponding MQTT credentials, we'll next need to place the credentials into a `.env` file in our application root directory. This will allow for the application to authenticate to the MQTT broker and listen for updates from registered IoT devices.
 
 ```
 IOT_API_KEY=
@@ -275,7 +278,7 @@ TONE_ANALYZER_PASSWORD=<add_tone_analyzer_password>
 
 <!-- <TODO, update picture> -->
 <p align="center">
-<img src="https://imgur.com/S5Ey44v.png"  data-canonical-src="https://i.imgur.com/S5Ey44v.png" width="750" height="450" style="margin-left: auto; margin-right: auto;">
+<img src="https://i.imgur.com/oQfJZ9x.png" style="margin-left: auto; margin-right: auto;">
 </p>
 
 <!--Include any troubleshooting tips (driver issues, etc)-->
@@ -292,19 +295,19 @@ Each option requires the following
 - A timestamp, which should be represented as either the UTC epoch format or the ISO-8601 format.
 - Sensor value(s) in a key/value format, ex. `sound: 65` (Optional)
 
-The first option is to create a node manually. This can be done by clicking the "Add Node" button and entering the required values. Once they have been entered, pressing "Create" should render a marker like so. A transparent circle will also be added if a sensor is provided, and the radius will depend on the sensor value
+The first option is to create a node manually. This can be done by clicking the "Add Node" button and entering the required values. Once they have been entered, pressing "Create" should render a marker like so. A transparent circle will also be added if a sensor is provided, and the radius length is determined by the sensor value
 
-<img src="https://i.imgur.com/jkG7yjB.png"  data-canonical-src="https://i.imgur.com/jkG7yjB.png" width="750" height="450" style="margin-left: auto; margin-right: auto;">
+<img src="https://i.imgur.com/Mh5qgjf.png"  style="margin-left: auto; margin-right: auto;">
 
-<img src="https://i.imgur.com/EayGwe3.png"  data-canonical-src="https://i.imgur.com/EayGwe3.png" width="750" height="450" style="margin-left: auto; margin-right: auto;">
+<img src="https://i.imgur.com/m8c2VIl.png" style="margin-left: auto; margin-right: auto;">
 
-In a live scenario, these updates should come in the form of MQTT messages sent by the various IoT devices. Each device can broadcast an update by publishing a MQTT message with the following payload:
+In a live scenario, these updates should come in the form of MQTT messages sent by associated IoT devices. Each device can broadcast an update by publishing a MQTT message with the following payload:
 
 ```
 mqtt_pub -v -i "a:${IOT_ORG_ID}:client_pub1" -u "${IOT_API_KEY}" -P "${IOT_AUTH_TOKEN}" -h 'agf5n9.messaging.internetofthings.ibmcloud.com' -p 1883 -t "iot-2/type/${IOT_DEVICE_TYPE}/id/${IOT_DEVICE_ID}/evt/assetMapper/fmt/json" -m '{
     "d" : {
     "node_id": "node2",
-    "lat": "-118.417392",
+    "lat": "-118.317392",
     "long": "34.100057",
     "timestamp": "2018-06-30T07:10:55.174Z",
     "sensor": {
@@ -314,22 +317,27 @@ mqtt_pub -v -i "a:${IOT_ORG_ID}:client_pub1" -u "${IOT_API_KEY}" -P "${IOT_AUTH_
 }'
 ```
 
-If there are multiple datapoints associated with an asset, we can use a "range slider" to trace back and view an assets path. As the slider is adjusted, each marker should update their location and sensor identifier. Also, the corresponding timestamp should be shown in the bottom right corner of the map.
-
-We can also bulk import CSV datasets. This can be done by clicking the "Import CSV File" button and selecting the file. In this example, we'll use data from tracking a herd of zebra in Botswana.
+We can also bulk import CSV datasets. In this example, we'll use data from tracking a herd of zebra in Botswana, which can be downloaded [here](https://www.datarepository.movebank.org/handle/10255/move.343). This file can be loaded by clicking the "Import CSV File" button.
 
 <img src="https://i.imgur.com/fwSzA7n.png"  data-canonical-src="https://i.imgur.com/fwSzA7n.png" width="750" height="450" style="margin-left: auto; margin-right: auto;">
 
-Once the file is loaded, headers will need to be selected to identify which columns correspond to each individual node id, location, and timestamp.
+Once the file is loaded, headers will need to be selected to identify which columns correspond to each individual node id, location, and timestamp. This can be done by manually inspecting the file
 
-<img src="https://i.imgur.com/tK9UWad.png"  data-canonical-src="https://i.imgur.com/tK9UWad.png" width="750" height="450" style="margin-left: auto; margin-right: auto;">
+<img src="https://i.imgur.com/CIZqhYG.png" style="margin-left: auto; margin-right: auto;">
+
+Next, select the headers in the "Select Dataset Columnds" form
+
+<img src="https://i.imgur.com/QG4qhZY.png" style="margin-left: auto; margin-right: auto;">
 
 Once the columns have been selected, markers for each node id should be visible like so.
 
-<img src="https://i.imgur.com/BbLKZO3.png"  data-canonical-src="https://i.imgur.com/BbLKZO3.png" width="750" height="450" style="margin-left: auto; margin-right: auto;">
+<img src="https://i.imgur.com/b5DzIxP.png"  style="margin-left: auto; margin-right: auto;">
 
 We can also click the "Show all paths" button to draw the path traversed by each asset.
-<img src="https://i.imgur.com/aIrQU6T.png"  data-canonical-src="https://i.imgur.com/aIrQU6T.png" width="750" height="450" style="margin-left: auto; margin-right: auto;">
+<img src="https://i.imgur.com/33PbBLN.png"  style="margin-left: auto; margin-right: auto;">
+
+If there are multiple datapoints associated with an asset, we can use a "range slider" to trace back and view an assets path. As the slider is adjusted, each marker should update their location and sensor identifier. Also, the corresponding timestamp should be shown in the bottom right corner of the map.
+<!-- TODO, add animation -->
 
 # Troubleshooting
 
