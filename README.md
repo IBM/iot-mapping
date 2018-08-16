@@ -161,18 +161,16 @@ Next, we'll need to deploy our service instances using the IBM Cloud dashboard.
 
 Navigate to the IBM Cloud dashboard at [https://console.bluemix.net/](https://console.bluemix.net/) and click the "Catalog" button in the upper right
 <p align="center">
-<img src="https://i.imgur.com/vFCHSF4.png">
+<img src="https://i.imgur.com/0CctlyI.png"  data-canonical-src="https://i.imgur.com/0CctlyI.png">
 </p>
 
-Type in the name of the service and select the resulting icon
+In the search bar type "IoT" and click the icon titled "Internet of Things Platform Starter".
+
 <p align="center">
-<img src="https://i.imgur.com/X78OVt7.png">
+<img src="https://i.imgur.com/GtCcdEJ.png"  data-canonical-src="https://i.imgur.com/GtCcdEJ.png">
 </p>
 
 Select the pricing plan and click "Create". If deploying on an IBM Lite account, be sure to select the free "Lite" plan
-<p align="center">
-<img src="https://i.imgur.com/S0iNZu0.png">
-</p>
 
 #### Additional Configuration: Generate Watson IoT service credentials
 After being provisioned, the Watson IoT Platform service will need a bit of additional configuration, as we'll need to generate a set of credentials for connecting to the broker. We can do so by entering the IoT Platform dashboard, selecting "Devices" from the left hand menu, and then clicking the "Add Device" button.
