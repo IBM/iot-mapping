@@ -159,21 +159,21 @@ Next, we'll need to deploy our service instances using the IBM Cloud dashboard.
 
 ### Watson IoT Platform
 
-Navigate to the IBM Cloud dashboard at [https://console.bluemix.net/](https://console.bluemix.net/) and click the "Catalog" button in the upper right
+Navigate to the IBM Cloud dashboard at [https://console.bluemix.net/](https://console.bluemix.net/) and click the `Catalog` button in the upper right
 <p align="center">
 <img src="https://i.imgur.com/0CctlyI.png"  data-canonical-src="https://i.imgur.com/0CctlyI.png">
 </p>
 
-In the search bar type "Internet of Things" and click the icon titled "Internet of Things Platform".
+In the search bar type "Internet of Things" and click the icon titled `Internet of Things Platform`.
 
 <p align="center">
 <img src="https://i.imgur.com/pjZ3jrI.png" >
 </p>
 
-Select the pricing plan and click "Create". If deploying on an IBM Lite account, be sure to select the free "Lite" plan
+Select the pricing plan and click `Create`. If deploying on an IBM Lite account, be sure to select the free "Lite" plan
 
 #### Additional Configuration: Generate Watson IoT service credentials
-After being provisioned, the IoT Platform service will need a bit of additional configuration, as we'll need to generate a set of credentials for connecting to the broker. We can do so by entering the IoT Platform dashboard, selecting "Devices" from the left hand menu, and then clicking the "Add Device" button.
+After being provisioned, the IoT Platform service will need a bit of additional configuration, as we'll need to generate a set of credentials for connecting to the broker. We can do so by entering the IoT Platform dashboard, selecting `Devices` from the left hand menu, and then clicking the `Add Device` button.
 
 <p align="center">
 <img src="https://i.imgur.com/fec24FG.png"  data-canonical-src="https://i.imgur.com/fec24FG.png">
@@ -190,20 +190,20 @@ The next few tabs (Device Information, Groups, Security) can be left as is with 
 <img src="https://i.imgur.com/rycnjlF.png"  data-canonical-src="https://i.imgur.com/rycnjlF.png">
 </p>
 
-Clicking the "Finish" button will register a device and generate a set of credentials that can be used to publish messages to the IoT Platform. Be sure to take note of the Device type and Device ID, and place both in the `cfcreds.env` file.
+Clicking the `Finish` button will register a device and generate a set of credentials that can be used to publish messages to the IoT Platform. Be sure to take note of the Device type and Device ID, and place both in the `cfcreds.env` file.
 
 We'll need to generate a different set of credentials to be able to publish and subscribe to the MQTT Broker
 <!-- <p align="center">
 <img src="https://i.imgur.com/A2A6yXW.png" width="650" height="450">
 </p> -->
 
-We can do so by selecting the "Apps" option in the left hand menu. Then, click the "Generate API Key" button
+We can do so by selecting the `Apps` option in the left hand menu. Then, click the `Generate API Key` button
 <p align="center">
 <img src="https://i.imgur.com/b9Iu9DS.png" width="650" height="450">
 </p>
 
-We can leave the fields in the "Information" blank and click next.
-In the "Permissions" tab, we'll select the "Backend Trusted Application" role. Once this is selected, click "Generate Key"
+We can leave the fields in the `Information` blank and click next.
+In the `Permissions` tab, we'll select the `Backend Trusted Application` role. Once this is selected, click `Generate Key`
 <p align="center">
 <img src="https://i.imgur.com/ss6jpOZ.png" width="650" height="450">
 </p>
@@ -292,7 +292,7 @@ Each option requires the following
 - A timestamp, which should be represented as either the UTC epoch format or the ISO-8601 format.
 - Sensor value(s) in a key/value format, ex. `sound: 65` (Optional)
 
-The first option is to create a node manually. This can be done by clicking the "Add Node" button and entering the required values. Once they have been entered, pressing "Create" should render a marker like so. A transparent circle will also be added if a sensor is provided, and the radius length is determined by the sensor value
+The first option is to create a node manually. This can be done by clicking the `Add Node button and entering the required values. Once they have been entered, pressing `Create` should render a marker like so. A transparent circle will also be added if a sensor is provided, and the radius length is determined by the sensor value
 
 <img src="https://i.imgur.com/Mh5qgjf.png"  style="margin-left: auto; margin-right: auto;">
 
@@ -314,7 +314,7 @@ mqtt_pub -v -i "a:${IOT_ORG_ID}:client_pub1" -u "${IOT_API_KEY}" -P "${IOT_AUTH_
 }'
 ```
 
-We can also bulk import CSV datasets. In this example, we'll use data from tracking a herd of zebra in Botswana, which can be downloaded [here](https://www.datarepository.movebank.org/handle/10255/move.343). This file can be loaded by clicking the "Import CSV File" button.
+We can also bulk import CSV datasets. In this example, we'll use data from tracking a herd of zebra in Botswana, which can be downloaded [here](https://www.datarepository.movebank.org/handle/10255/move.343). This file can be loaded by clicking the `Import CSV File` button.
 
 <img src="https://i.imgur.com/fwSzA7n.png"  data-canonical-src="https://i.imgur.com/fwSzA7n.png" width="750" height="450" style="margin-left: auto; margin-right: auto;">
 
@@ -322,7 +322,7 @@ Once the file is loaded, headers will need to be selected to identify which colu
 
 <img src="https://i.imgur.com/CIZqhYG.png" style="margin-left: auto; margin-right: auto;">
 
-Next, select the headers in the "Select Dataset Columnds" form
+Next, select the headers in the `Select Dataset Columns` form
 
 <img src="https://i.imgur.com/QG4qhZY.png" style="margin-left: auto; margin-right: auto;">
 
@@ -330,7 +330,7 @@ Once the columns have been selected, markers for each node id should be visible 
 
 <img src="https://i.imgur.com/b5DzIxP.png"  style="margin-left: auto; margin-right: auto;">
 
-We can also click the "Show all paths" button to draw the path traversed by each asset.
+We can also click the `Show all paths` button to draw the path traversed by each asset.
 <img src="https://i.imgur.com/33PbBLN.png"  style="margin-left: auto; margin-right: auto;">
 
 If there are multiple datapoints associated with an asset, we can use a "range slider" to trace back and view an assets path. As the slider is adjusted, each marker should update their location and sensor identifier. Also, the corresponding timestamp should be shown in the bottom right corner of the map.
