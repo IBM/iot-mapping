@@ -6,18 +6,29 @@
 <!--Add a new Title and fill in the blanks -->
 # IoT - Asset Tracking with Leaflet and ArcGIS
 
-In this Code Pattern composite, we'll demonstrate how to track assets and visualize incoming sensor data from the Watson IoT Platform on a mapping application using Leaflet.js and ArcGIS. This is a continuation of the "Smart City" code pattern composite. This application targets two primary use cases:
+In this Code Pattern composite, we'll demonstrate how to track mobile assets and visualize incoming sensor data on an interactive map.
+
+This project is implemented as a Node.js application. On the front end, we leverage the Leaflet.js + ArcGIS libraries to render the map and icons. On the backend we use the Express.js framework to serve the UI view and host API endpoints.
+
+Asset location/sensor updates are published to the Watson IoT Platform via the MQTT protocol. Each location update is archived in a Cloudant DB, and rendered on a map as a marker pinpoint.
+
+<!-- TODO, add link to pattern overview page -->
+
+<!-- This is a continuation of the "Smart City" code pattern composite.  -->
+
+<!-- This application targets two primary use cases:
 
 The first use case is tracking moving IoT assets. This can be anything that has a GPS module attached, whether that be a shipping truck, a tagged wild animal, etc.
 
-The second use case is to visualize sensor data associated with various connected IoT devices. This sensor data can represent any measurable physical property, such as temperature, sound, air quality, humidity, etc.
+The second use case is to visualize sensor data associated with various connected IoT devices. This sensor data can represent any measurable physical property, such as temperature, sound, air quality, humidity, etc. -->
 
-When the reader has completed this Code Pattern, they will understand how to:
+
+<!-- When the reader has completed this Code Pattern, they will understand how to:
 
 * Publish sensor and location data to the Watson IoT Platform
 * Import historical CSV datasets for visualization
 * Persist data in a Cloudant Database
-* View the status of IoT assets in a map
+* View the status of IoT assets in a map -->
 
 <p align="center">
 <img src="https://i.imgur.com/6DFEiFB.png">
@@ -26,39 +37,6 @@ When the reader has completed this Code Pattern, they will understand how to:
 <!-- TODO, add picture here -->
 <!--Remember to dump an image in this path-->
 
-
-## Flow
-<!--Add new flow steps based on the architecture diagram-->
-<!-- 1. Upload and Instantiate smart contracts via the Bluemix Network Monitor
-2. Deploy the node application locally or on bluemix
-3. Input connection information such as service credentials, endpoint, etc into configuration form
-4. Submitting form sends a request to pull a json file containing the connection profile. The information from this profile is used to create a "monitoring" client with administrative privileges
-
-5. If form data is valid, user should be able to execute Chaincode operations, view individual blocks and their data, and request state of registered Assets -->
-
-1. User registers an "end node" via the mapping UI or a MQTT message. This end node represents a trackable asset capable of publishing location and sensor data.
-
-2. Express backend subscribes to Watson IoT Platform channel corresponding to one or more end nodes.
-
-3. End Node continuously publishes JSON object containing location, time, and sensor data to Watson IoT Platform
-
-```
-{
-  d: {
-    node_id: "asset1",
-    longitude: "-118.417392",
-    latitude: "34.100057",
-    timestamp: "2018-06-30T07:10:55.174Z",
-    sensor: {
-      sound: "72"
-    }
-  }
-}
-```
-
-4. Message persists in Cloudant DB
-
-5. Front end (Leaflet.js) updates marker location on map
 
 ## Install Prerequisites:
 
@@ -89,32 +67,15 @@ node app.js
 ```
 
 <!--Update this section-->
-## Included components
-* [Watson IoT Platform](https://console.bluemix.net/catalog/services/blockchain)
-* [Cloudant DB](https://console.bluemix.net/catalog/services/cloudant)
-<!--Update this section-->
-## Featured technologies
-<!-- Select components from [here](https://github.ibm.com/developer-journeys/journey-docs/tree/master/_content/dev#technologies), copy and paste the raw text for ease -->
-* [npm](https://www.npmjs.com/)
-* [node.js](https://nodejs.org/en/)
-* [leaflet.js](https://leafletjs.com/)
-* [ArcGIS](https://console.bluemix.net/catalog/services/esri-arcgis-for-developers)
-
-<!--Update this section when the video is created-->
-# Watch the Video
-<!-- [![](http://img.youtube.com/vi/Jxi7U7VOMYg/0.jpg)](https://www.youtube.com/watch?v=Jxi7U7VOMYg) -->
-In progress
-
 
 # Steps
 There are two methods we can use to deploy the application, either use the ``Deploy to IBM Cloud`` steps **OR** create the services and run locally.
 1. [Clone repository](#1-clone-the-repository)
 2. [Setup repository codebase locally](#2-deploy-application-locally) OR [Deploy to IBM Cloud](#2-deploy-application-to-ibm-cloud)
 3. [Create Watson services with IBM Cloud](#3-create-services)
-<!-- 4. [Upload and Instantiate Chaincode](#4-upload-and-instantiate-chaincode) -->
-5. [Start the Application](#5-run-the-application)
-6. [Retrieve service credentials](#6-obtain-service-credentials)
-7. [Configure and run the application](#7-ui-configuration)
+4. [Start the Application](#4-run-the-application)
+5. [Retrieve service credentials](#5-obtain-service-credentials)
+6. [Configure and run the application](#6-ui-configuration)
 
 ## 1. Clone the repository
 
@@ -337,20 +298,6 @@ If there are multiple datapoints associated with an asset, we can use a "range s
 <!-- TODO, add animation -->
 
 # Troubleshooting
-
-
-
-# Links
-- [The New Frontier in Protecting the Endangered Rhino](https://www.ibm.com/blogs/internet-of-things/protecting-endangered-rhinos/)
-- [IBM Helps Protect Endangered African Rhinos with IoT Technology](https://www.youtube.com/watch?v=E9olFUDD_2M)
-- [GIS for Wildlife Conservation](https://www.esri.com/library/bestpractices/wildlife-conservation.pdf)
-<!-- * [Demo on Youtube](https://www.youtube.com/watch?v=Jxi7U7VOMYg) -->
-
-<!-- pick the relevant ones from below -->
-# Learn more
-
-* **IoT Code Patterns**: Enjoyed this Code Pattern? Check out our other [IoT Code Patterns](https://developer.ibm.com/code/technologies/iot/).
-* **Emerging Tech Code Pattern Playlist**: Bookmark our [playlist](https://www.youtube.com/playlist?list=PLzUbsvIyrNfkmf4_91eLqELe6e0tFR_9W) with all of our Code Pattern videos
 
 <!--keep this-->
 
