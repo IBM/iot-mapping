@@ -6,11 +6,21 @@
 <!--Add a new Title and fill in the blanks -->
 # IoT - Asset Tracking with Leaflet and ArcGIS
 
-In this Code Pattern composite, we'll demonstrate how to track mobile assets and visualize incoming sensor data on an interactive map.
+In this Code Pattern composite, we'll demonstrate how to track mobile assets and visualize incoming sensor data on an interactive map. This demonstration is implemented as a Node.js application. On the front end, the Leaflet.js + ArcGIS libraries are leveraged to render the map and icons. On the backend we use the Express.js framework to serve the UI view and host API endpoints. Asset location updates are published to the Watson IoT Platform in the form of a JSON object like so.
 
-This project is implemented as a Node.js application. On the front end, we leverage the Leaflet.js + ArcGIS libraries to render the map and icons. On the backend we use the Express.js framework to serve the UI view and host API endpoints.
+```
+"d" : {
+  "node_id": "asset1",
+  "lat": "-118.417392",
+  "long": "34.0057",
+  "timestamp": "2018-06-30T07:10:55.174Z",
+  "sensor": {
+    "sound": "72",
+  }
+}
+```
 
-Asset location/sensor updates are published to the Watson IoT Platform via the MQTT protocol. Each location update is archived in a Cloudant DB, and rendered on a map as a marker pinpoint.
+As each asset publishes their location updates, their corresponding marker is adjusted in the mapping application. Each update is also archived in a Cloudant database, so the user can easily trace back through the path traversed by the asset.
 
 <!-- TODO, add link to pattern overview page -->
 
@@ -29,7 +39,7 @@ The second use case is to visualize sensor data associated with various connecte
 * Import historical CSV datasets for visualization
 * Persist data in a Cloudant Database
 * View the status of IoT assets in a map -->
-
+## Architecture
 <p align="center">
 <img src="https://i.imgur.com/6DFEiFB.png">
 </p>
