@@ -283,7 +283,7 @@ Once the file is loaded, headers will need to be selected to identify which colu
 
 <img src="https://i.imgur.com/CIZqhYG.png" style="margin-left: auto; margin-right: auto;">
 
-Next, select the headers in the "Select Dataset Columnds" form
+Next, select the headers in the "Select Dataset Columns" form
 
 <img src="https://i.imgur.com/QG4qhZY.png" style="margin-left: auto; margin-right: auto;">
 
