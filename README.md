@@ -6,7 +6,12 @@
 <!--Add a new Title and fill in the blanks -->
 # IoT - Asset Tracking with Leaflet and ArcGIS
 
-In this Code Pattern composite, we'll demonstrate how to track mobile assets and visualize incoming sensor data on an interactive map. This demonstration is implemented as a Node.js application. On the front end, the Leaflet.js + ArcGIS libraries are leveraged to render the map and icons. On the backend we use the Express.js framework to serve the UI view and host API endpoints. Asset location updates are published to the Watson IoT Platform in the form of a JSON object like so.
+In this Code Pattern composite, we'll demonstrate how to track assets and visualize incoming sensor data from the Watson IoT Platform on a mapping application using Leaflet.js and ArcGIS. This is a continuation of the "Smart City" code pattern composite. This application targets two primary use cases:
+
+The first use case is tracking moving IoT assets. This can be anything that has a GPS module attached, whether that be a shipping truck, a tagged wild animal, etc.
+
+The second use case is to visualize sensor data associated with various connected IoT devices. This sensor data can represent any measurable physical property, such as temperature, sound, air quality, humidity, etc.
+
 
 ```
 "d" : {
@@ -20,26 +25,11 @@ In this Code Pattern composite, we'll demonstrate how to track mobile assets and
 }
 ```
 
-As each asset publishes their location updates, their corresponding marker is adjusted in the mapping application. Each update is also archived in a Cloudant database, so the user can easily trace back through the path traversed by the asset.
-
-<!-- TODO, add link to pattern overview page -->
-
-<!-- This is a continuation of the "Smart City" code pattern composite.  -->
-
-<!-- This application targets two primary use cases:
-
-The first use case is tracking moving IoT assets. This can be anything that has a GPS module attached, whether that be a shipping truck, a tagged wild animal, etc.
-
-The second use case is to visualize sensor data associated with various connected IoT devices. This sensor data can represent any measurable physical property, such as temperature, sound, air quality, humidity, etc. -->
-
-
-<!-- When the reader has completed this Code Pattern, they will understand how to:
-
 * Publish sensor and location data to the Watson IoT Platform
 * Import historical CSV datasets for visualization
 * Persist data in a Cloudant Database
-* View the status of IoT assets in a map -->
-## Architecture
+* View the status of IoT assets in a map
+
 <p align="center">
 <img src="https://i.imgur.com/6DFEiFB.png">
 </p>
@@ -47,6 +37,35 @@ The second use case is to visualize sensor data associated with various connecte
 <!-- TODO, add picture here -->
 <!--Remember to dump an image in this path-->
 
+<!-- TODO, add link to pattern overview page -->
+
+<!-- This is a continuation of the "Smart City" code pattern composite.  -->
+
+<!-- This application targets two primary use cases:
+
+1. User registers an "end node" via the mapping UI or a MQTT message. This end node represents a trackable asset capable of publishing location and sensor data.
+
+2. Express backend subscribes to Watson IoT Platform channel corresponding to one or more end nodes.
+
+3. End Node continuously publishes JSON object containing location, time, and sensor data to Watson IoT Platform
+
+```
+{
+  d: {
+    node_id: "asset1",
+    longitude: "-118.417392",
+    latitude: "34.100057",
+    timestamp: "2018-06-30T07:10:55.174Z",
+    sensor: {
+      sound: "72"
+    }
+  }
+}
+```
+
+4. Message persists in Cloudant DB
+
+5. Front end (Leaflet.js) updates marker location on map
 
 ## Install Prerequisites:
 
@@ -77,6 +96,21 @@ node app.js
 ```
 
 <!--Update this section-->
+## Included components
+* [Watson IoT Platform](https://console.bluemix.net/catalog/services/blockchain)
+* [Cloudant DB](https://console.bluemix.net/catalog/services/cloudant)
+<!--Update this section-->
+## Featured technologies
+<!-- Select components from [here](https://github.ibm.com/developer-journeys/journey-docs/tree/master/_content/dev#technologies), copy and paste the raw text for ease -->
+* [npm](https://www.npmjs.com/)
+* [node.js](https://nodejs.org/en/)
+* [leaflet.js](https://leafletjs.com/)
+* [ArcGIS](https://console.bluemix.net/catalog/services/esri-arcgis-for-developers)
+
+<!--Update this section when the video is created-->
+# Watch the Video
+<!-- [![](http://img.youtube.com/vi/Jxi7U7VOMYg/0.jpg)](https://www.youtube.com/watch?v=Jxi7U7VOMYg) -->
+In progress
 
 # Steps
 There are two methods we can use to deploy the application, either use the ``Deploy to IBM Cloud`` steps **OR** create the services and run locally.
@@ -135,16 +169,18 @@ Navigate to the IBM Cloud dashboard at [https://console.bluemix.net/](https://co
 <img src="https://i.imgur.com/0CctlyI.png"  data-canonical-src="https://i.imgur.com/0CctlyI.png">
 </p>
 
-In the search bar type "Internet of Things" and click the icon titled "Internet of Things Platform".
+In the search bar type "IoT" and click the icon titled "Internet of Things Platform Starter".
 
 <p align="center">
-<img src="https://i.imgur.com/pjZ3jrI.png" >
+<img src="https://i.imgur.com/GtCcdEJ.png"  data-canonical-src="https://i.imgur.com/GtCcdEJ.png">
 </p>
 
 Select the pricing plan and click "Create". If deploying on an IBM Lite account, be sure to select the free "Lite" plan
 
 #### Additional Configuration: Generate Watson IoT service credentials
-After being provisioned, the IoT Platform service will need a bit of additional configuration, as we'll need to generate a set of credentials for connecting to the broker. We can do so by entering the IoT Platform dashboard, selecting "Devices" from the left hand menu, and then clicking the "Add Device" button.
+
+After being provisioned, the Watson IoT Platform service will need a bit of additional configuration, as we'll need to generate a set of credentials for connecting to the broker. We can do so by entering the IoT Platform dashboard, selecting "Devices" from the left hand menu, and then clicking the "Add Device" button.
+
 
 <p align="center">
 <img src="https://i.imgur.com/fec24FG.png"  data-canonical-src="https://i.imgur.com/fec24FG.png">
@@ -253,6 +289,7 @@ TONE_ANALYZER_PASSWORD=<add_tone_analyzer_password>
 
 ## 7. Visualize assets in UI
 
+
 Now, we can actually confirm that the UI is able to visualize asset locations and sensor data.
 
 There are a few ways to import data to be viewed in the mapping application.
@@ -288,6 +325,65 @@ mqtt_pub -v -i "a:${IOT_ORG_ID}:client_pub1" -u "${IOT_API_KEY}" -P "${IOT_AUTH_
 We can also bulk import CSV datasets. In this example, we'll use data from tracking a herd of zebra in Botswana, which can be downloaded [here](https://www.datarepository.movebank.org/handle/10255/move.343). This file can be loaded by clicking the "Import CSV File" button.
 
 <img src="https://i.imgur.com/fwSzA7n.png"  data-canonical-src="https://i.imgur.com/fwSzA7n.png" width="750" height="450" style="margin-left: auto; margin-right: auto;">
+
+Once the file is loaded, headers will need to be selected to identify which columns correspond to each individual node id, location, and timestamp. This can be done by manually inspecting the file
+
+<img src="https://i.imgur.com/CIZqhYG.png" style="margin-left: auto; margin-right: auto;">
+
+Next, select the headers in the "Select Dataset Columns" form
+
+<img src="https://i.imgur.com/QG4qhZY.png" style="margin-left: auto; margin-right: auto;">
+
+Once the columns have been selected, markers for each node id should be visible like so.
+
+<img src="https://i.imgur.com/b5DzIxP.png"  style="margin-left: auto; margin-right: auto;">
+
+We can also click the "Show all paths" button to draw the path traversed by each asset.
+<img src="https://i.imgur.com/33PbBLN.png"  style="margin-left: auto; margin-right: auto;">
+
+If there are multiple datapoints associated with an asset, we can use a "range slider" to trace back and view an assets path. As the slider is adjusted, each marker should update their location and sensor identifier. Also, the corresponding timestamp should be shown in the bottom right corner of the map.
+<!-- TODO, add animation -->
+
+Now, we can actually confirm that the UI is able to visualize asset locations and sensor data.
+
+There are a few ways to import data to be viewed in the mapping application.
+
+Each option requires the following
+- A unique string identifier, corresponding to the specific IoT device.
+- A set of Longitude/Latitude coordinates
+- A timestamp, which should be represented as either the UTC epoch format or the ISO-8601 format.
+- Sensor value(s) in a key/value format, ex. `sound: 65` (Optional)
+
+The first option is to create a node manually. This can be done by clicking the "Add Node" button and entering the required values. Once they have been entered, pressing "Create" should render a marker like so. A transparent circle will also be added if a sensor is provided, and the radius length is determined by the sensor value
+
+<img src="https://i.imgur.com/Mh5qgjf.png"  style="margin-left: auto; margin-right: auto;">
+
+<img src="https://i.imgur.com/m8c2VIl.png" style="margin-left: auto; margin-right: auto;">
+
+In a live scenario, these updates should come in the form of MQTT messages sent by associated IoT devices. Each device can broadcast an update by publishing a MQTT message with the following payload:
+
+```
+mqtt_pub -v -i "a:${IOT_ORG_ID}:client_pub1" -u "${IOT_API_KEY}" -P "${IOT_AUTH_TOKEN}" -h 'agf5n9.messaging.internetofthings.ibmcloud.com' -p 1883 -t "iot-2/type/${IOT_DEVICE_TYPE}/id/${IOT_DEVICE_ID}/evt/assetMapper/fmt/json" -m '{
+    "d" : {
+    "node_id": "node2",
+    "lat": "-118.317392",
+    "long": "34.100057",
+    "timestamp": "2018-06-30T07:10:55.174Z",
+    "sensor": {
+      "sound": "72"
+    }
+  }
+}'
+```
+
+We can also bulk import CSV datasets. In this example, we'll use data from tracking a herd of zebra in Botswana, which can be downloaded [here](https://www.datarepository.movebank.org/handle/10255/move.343). This file can be loaded by clicking the "Import CSV File" button.
+
+# Links
+- [The New Frontier in Protecting the Endangered Rhino](https://www.ibm.com/blogs/internet-of-things/protecting-endangered-rhinos/)
+- [IBM Helps Protect Endangered African Rhinos with IoT Technology](https://www.youtube.com/watch?v=E9olFUDD_2M)
+- [GIS for Wildlife Conservation](https://www.esri.com/library/bestpractices/wildlife-conservation.pdf)
+<!-- * [Demo on Youtube](https://www.youtube.com/watch?v=Jxi7U7VOMYg) -->
+
 
 Once the file is loaded, headers will need to be selected to identify which columns correspond to each individual node id, location, and timestamp. This can be done by manually inspecting the file
 
