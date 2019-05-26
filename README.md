@@ -1,9 +1,6 @@
-<!--Put badges at the very top -->
-<!--change the repos -->
-<!--change the tracking number -->
-<!-- [![Build Status](https://travis-ci.org/IBM/watson-banking-chatbot.svg?branch=master)](https://travis-ci.org/IBM/watson-banking-chatbot) -->
 
-<!--Add a new Title and fill in the blanks -->
+
+<!-- Add a new Title and fill in the blanks -->
 # IoT - Asset Tracking with Leaflet and ArcGIS
 
 In this Code Pattern composite, we'll demonstrate how to track assets and visualize incoming sensor data from the Watson IoT Platform on a mapping application using Leaflet.js and ArcGIS. This is a continuation of the "Smart City" code pattern composite. This application targets two primary use cases:
@@ -25,23 +22,10 @@ The second use case is to visualize sensor data associated with various connecte
 }
 ```
 
-* Publish sensor and location data to the Watson IoT Platform
-* Import historical CSV datasets for visualization
-* Persist data in a Cloudant Database
-* View the status of IoT assets in a map
 
-<p align="center">
-<img src="https://i.imgur.com/6DFEiFB.png">
-</p>
+## Application Workflow Diagram
+![Workflow](images/track-vis-assets-arch-diagram2.png)
 
-<!-- TODO, add picture here -->
-<!--Remember to dump an image in this path-->
-
-<!-- TODO, add link to pattern overview page -->
-
-<!-- This is a continuation of the "Smart City" code pattern composite.  -->
-
-<!-- This application targets two primary use cases:
 
 1. User registers an "end node" via the mapping UI or a MQTT message. This end node represents a trackable asset capable of publishing location and sensor data.
 
@@ -95,22 +79,19 @@ Start the application with
 node app.js
 ```
 
-<!--Update this section-->
+
 ## Included components
 * [Watson IoT Platform](https://console.bluemix.net/catalog/services/blockchain)
 * [Cloudant DB](https://console.bluemix.net/catalog/services/cloudant)
-<!--Update this section-->
-## Featured technologies
+
+
+## Prerequisites
 <!-- Select components from [here](https://github.ibm.com/developer-journeys/journey-docs/tree/master/_content/dev#technologies), copy and paste the raw text for ease -->
 * [npm](https://www.npmjs.com/)
 * [node.js](https://nodejs.org/en/)
 * [leaflet.js](https://leafletjs.com/)
 * [ArcGIS](https://console.bluemix.net/catalog/services/esri-arcgis-for-developers)
 
-<!--Update this section when the video is created-->
-# Watch the Video
-<!-- [![](http://img.youtube.com/vi/Jxi7U7VOMYg/0.jpg)](https://www.youtube.com/watch?v=Jxi7U7VOMYg) -->
-In progress
 
 # Steps
 There are two methods we can use to deploy the application, either use the ``Deploy to IBM Cloud`` steps **OR** create the services and run locally.
