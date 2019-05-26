@@ -12,7 +12,18 @@ The first use case is tracking moving IoT assets. This can be anything that has 
 
 The second use case is to visualize sensor data associated with various connected IoT devices. This sensor data can represent any measurable physical property, such as temperature, sound, air quality, humidity, etc.
 
-When the reader has completed this Code Pattern, they will understand how to:
+
+```
+"d" : {
+  "node_id": "asset1",
+  "lat": "-118.417392",
+  "long": "34.0057",
+  "timestamp": "2018-06-30T07:10:55.174Z",
+  "sensor": {
+    "sound": "72",
+  }
+}
+```
 
 * Publish sensor and location data to the Watson IoT Platform
 * Import historical CSV datasets for visualization
@@ -26,15 +37,11 @@ When the reader has completed this Code Pattern, they will understand how to:
 <!-- TODO, add picture here -->
 <!--Remember to dump an image in this path-->
 
+<!-- TODO, add link to pattern overview page -->
 
-## Flow
-<!--Add new flow steps based on the architecture diagram-->
-<!-- 1. Upload and Instantiate smart contracts via the Bluemix Network Monitor
-2. Deploy the node application locally or on bluemix
-3. Input connection information such as service credentials, endpoint, etc into configuration form
-4. Submitting form sends a request to pull a json file containing the connection profile. The information from this profile is used to create a "monitoring" client with administrative privileges
+<!-- This is a continuation of the "Smart City" code pattern composite.  -->
 
-5. If form data is valid, user should be able to execute Chaincode operations, view individual blocks and their data, and request state of registered Assets -->
+<!-- This application targets two primary use cases:
 
 1. User registers an "end node" via the mapping UI or a MQTT message. This end node represents a trackable asset capable of publishing location and sensor data.
 
@@ -105,16 +112,14 @@ node app.js
 <!-- [![](http://img.youtube.com/vi/Jxi7U7VOMYg/0.jpg)](https://www.youtube.com/watch?v=Jxi7U7VOMYg) -->
 In progress
 
-
 # Steps
 There are two methods we can use to deploy the application, either use the ``Deploy to IBM Cloud`` steps **OR** create the services and run locally.
 1. [Clone repository](#1-clone-the-repository)
 2. [Setup repository codebase locally](#2-deploy-application-locally) OR [Deploy to IBM Cloud](#2-deploy-application-to-ibm-cloud)
 3. [Create Watson services with IBM Cloud](#3-create-services)
-<!-- 4. [Upload and Instantiate Chaincode](#4-upload-and-instantiate-chaincode) -->
-5. [Start the Application](#5-run-the-application)
-6. [Retrieve service credentials](#6-obtain-service-credentials)
-7. [Configure and run the application](#7-ui-configuration)
+4. [Start the Application](#4-run-the-application)
+5. [Retrieve service credentials](#5-obtain-service-credentials)
+6. [Configure and run the application](#6-ui-configuration)
 
 ## 1. Clone the repository
 
@@ -173,7 +178,9 @@ In the search bar type "IoT" and click the icon titled "Internet of Things Platf
 Select the pricing plan and click "Create". If deploying on an IBM Lite account, be sure to select the free "Lite" plan
 
 #### Additional Configuration: Generate Watson IoT service credentials
+
 After being provisioned, the Watson IoT Platform service will need a bit of additional configuration, as we'll need to generate a set of credentials for connecting to the broker. We can do so by entering the IoT Platform dashboard, selecting "Devices" from the left hand menu, and then clicking the "Add Device" button.
+
 
 <p align="center">
 <img src="https://i.imgur.com/fec24FG.png"  data-canonical-src="https://i.imgur.com/fec24FG.png">
@@ -282,6 +289,7 @@ TONE_ANALYZER_PASSWORD=<add_tone_analyzer_password>
 
 ## 7. Visualize assets in UI
 
+
 Now, we can actually confirm that the UI is able to visualize asset locations and sensor data.
 
 There are a few ways to import data to be viewed in the mapping application.
@@ -336,9 +344,39 @@ We can also click the "Show all paths" button to draw the path traversed by each
 If there are multiple datapoints associated with an asset, we can use a "range slider" to trace back and view an assets path. As the slider is adjusted, each marker should update their location and sensor identifier. Also, the corresponding timestamp should be shown in the bottom right corner of the map.
 <!-- TODO, add animation -->
 
-# Troubleshooting
+Now, we can actually confirm that the UI is able to visualize asset locations and sensor data.
 
+There are a few ways to import data to be viewed in the mapping application.
 
+Each option requires the following
+- A unique string identifier, corresponding to the specific IoT device.
+- A set of Longitude/Latitude coordinates
+- A timestamp, which should be represented as either the UTC epoch format or the ISO-8601 format.
+- Sensor value(s) in a key/value format, ex. `sound: 65` (Optional)
+
+The first option is to create a node manually. This can be done by clicking the "Add Node" button and entering the required values. Once they have been entered, pressing "Create" should render a marker like so. A transparent circle will also be added if a sensor is provided, and the radius length is determined by the sensor value
+
+<img src="https://i.imgur.com/Mh5qgjf.png"  style="margin-left: auto; margin-right: auto;">
+
+<img src="https://i.imgur.com/m8c2VIl.png" style="margin-left: auto; margin-right: auto;">
+
+In a live scenario, these updates should come in the form of MQTT messages sent by associated IoT devices. Each device can broadcast an update by publishing a MQTT message with the following payload:
+
+```
+mqtt_pub -v -i "a:${IOT_ORG_ID}:client_pub1" -u "${IOT_API_KEY}" -P "${IOT_AUTH_TOKEN}" -h 'agf5n9.messaging.internetofthings.ibmcloud.com' -p 1883 -t "iot-2/type/${IOT_DEVICE_TYPE}/id/${IOT_DEVICE_ID}/evt/assetMapper/fmt/json" -m '{
+    "d" : {
+    "node_id": "node2",
+    "lat": "-118.317392",
+    "long": "34.100057",
+    "timestamp": "2018-06-30T07:10:55.174Z",
+    "sensor": {
+      "sound": "72"
+    }
+  }
+}'
+```
+
+We can also bulk import CSV datasets. In this example, we'll use data from tracking a herd of zebra in Botswana, which can be downloaded [here](https://www.datarepository.movebank.org/handle/10255/move.343). This file can be loaded by clicking the "Import CSV File" button.
 
 # Links
 - [The New Frontier in Protecting the Endangered Rhino](https://www.ibm.com/blogs/internet-of-things/protecting-endangered-rhinos/)
@@ -346,13 +384,30 @@ If there are multiple datapoints associated with an asset, we can use a "range s
 - [GIS for Wildlife Conservation](https://www.esri.com/library/bestpractices/wildlife-conservation.pdf)
 <!-- * [Demo on Youtube](https://www.youtube.com/watch?v=Jxi7U7VOMYg) -->
 
-<!-- pick the relevant ones from below -->
-# Learn more
 
-* **IoT Code Patterns**: Enjoyed this Code Pattern? Check out our other [IoT Code Patterns](https://developer.ibm.com/code/technologies/iot/).
-* **Emerging Tech Code Pattern Playlist**: Bookmark our [playlist](https://www.youtube.com/playlist?list=PLzUbsvIyrNfkmf4_91eLqELe6e0tFR_9W) with all of our Code Pattern videos
+Once the file is loaded, headers will need to be selected to identify which columns correspond to each individual node id, location, and timestamp. This can be done by manually inspecting the file
+
+<img src="https://i.imgur.com/CIZqhYG.png" style="margin-left: auto; margin-right: auto;">
+
+Next, select the headers in the "Select Dataset Columns" form
+
+<img src="https://i.imgur.com/QG4qhZY.png" style="margin-left: auto; margin-right: auto;">
+
+Once the columns have been selected, markers for each node id should be visible like so.
+
+<img src="https://i.imgur.com/b5DzIxP.png"  style="margin-left: auto; margin-right: auto;">
+
+We can also click the "Show all paths" button to draw the path traversed by each asset.
+<img src="https://i.imgur.com/33PbBLN.png"  style="margin-left: auto; margin-right: auto;">
+
+If there are multiple datapoints associated with an asset, we can use a "range slider" to trace back and view an assets path. As the slider is adjusted, each marker should update their location and sensor identifier. Also, the corresponding timestamp should be shown in the bottom right corner of the map.
+<!-- TODO, add animation -->
+
+# Troubleshooting
 
 <!--keep this-->
 
 # License
-[Apache 2.0](LICENSE)
+This code pattern is licensed under the Apache Software License, Version 2.  Separate third party code objects invoked within this code pattern are licensed by their respective providers pursuant to their own separate licenses. Contributions are subject to the [Developer Certificate of Origin, Version 1.1 (DCO)](https://developercertificate.org/) and the [Apache Software License, Version 2](http://www.apache.org/licenses/LICENSE-2.0.txt).
+
+[Apache Software License (ASL) FAQ](http://www.apache.org/foundation/license-faq.html#WhatDoesItMEAN)
