@@ -117,9 +117,8 @@ There are two methods we can use to deploy the application, either use the ``Dep
 1. [Clone repository](#1-clone-the-repository)
 2. [Setup repository codebase locally](#2-deploy-application-locally) OR [Deploy to IBM Cloud](#2-deploy-application-to-ibm-cloud)
 3. [Create Watson services with IBM Cloud](#3-create-services)
-4. [Start the Application](#4-run-the-application)
-5. [Retrieve service credentials](#5-obtain-service-credentials)
-6. [Configure and run the application](#6-ui-configuration)
+4. [Retrieve service credentials](#4-obtain-service-credentials)
+5. [Configure and run the application](#5-run-the-application)
 
 ## 1. Clone the repository
 
@@ -220,7 +219,7 @@ The result will give us an API Key and Authentication Token. These can be suppli
 <img src="https://i.imgur.com/hfnB1B8.png" width="650" height="450">
 </p>
 
-## 5. Obtain service credentials
+## 4. Obtain service credentials
 
 Now that we've instantiated our Watson IoT Platform service instance and the corresponding MQTT credentials, we'll next need to place the credentials into a `.env` file in our application root directory. This will allow for the application to authenticate to the MQTT broker and listen for updates from registered IoT devices.
 
@@ -273,7 +272,7 @@ TONE_ANALYZER_PASSWORD=<add_tone_analyzer_password>
 ``` -->
 
 
-## 6. Run the application
+## 5. Run the application
 
 1. Start the app locally with `node app.js`.
 
@@ -287,7 +286,7 @@ TONE_ANALYZER_PASSWORD=<add_tone_analyzer_password>
 
 <!--Include any troubleshooting tips (driver issues, etc)-->
 
-## 7. Visualize assets in UI
+## 6. Visualize assets in UI
 
 
 Now, we can actually confirm that the UI is able to visualize asset locations and sensor data.
