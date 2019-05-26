@@ -119,6 +119,7 @@ There are two methods we can use to deploy the application, either use the ``Dep
 3. [Create Watson services with IBM Cloud](#3-create-services)
 4. [Retrieve service credentials](#4-obtain-service-credentials)
 5. [Configure and run the application](#5-run-the-application)
+6. [Visualize assets in UI](#6-visualize-assets-in-UI)
 
 ## 1. Clone the repository
 
