@@ -3,24 +3,26 @@ var path = require('path');
 
 var app = express();
 var fs = require('fs');
-var _ = require('underscore');
+//var _ = require('underscore');
+var animal_data = []
 
 if (fs.existsSync('./map_vals.json')) {
   //file exists
   try {
-    var animal_data = JSON.parse(fs.readFileSync('./map_vals.json'))
+    animal_data = JSON.parse(fs.readFileSync('./map_vals.json'))
   } catch(err) {
     console.log(err)
     console.log("unable to parse map_vals.json")
-    var animal_data = []
+    //var animal_data = []
   }
 } else {
   console.log("setting animal_data as empty var")
-  var animal_data = []
+  //var animal_data = []
 }
 
 var animal_ids = [...new Set(animal_data.map(item => item['individual-local-identifier']))];
 var animal_dict = {}
+var id, row
 
 // sort data by tracking id
 for (id in animal_ids) {

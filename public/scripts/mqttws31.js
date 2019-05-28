@@ -77,13 +77,13 @@
  * <a href="/clients/java/doc/javadoc/index.html"><big>Java</big></a>,
  * <a href="/clients/c/doc/html/index.html"><big>C</big></a>.
  */
-Messaging = (function (global) {
+var Messaging = (function (global) {
 
     // Private variables below, these are only visible inside the function closure
     // which is used to define the module. 
 
     var version = "0.0.0.0";
-    var buildLevel = "@BUILDLEVEL@";
+    //var buildLevel = "@BUILDLEVEL@";
 
     /**
      * Unique message type identifiers, with associated
@@ -121,7 +121,7 @@ Messaging = (function (global) {
      * @private
      */
     var validate = function (obj, keys) {
-        for (key in obj) {
+        for (var key in obj) {
             if (obj.hasOwnProperty(key)) {
                 if (keys.hasOwnProperty(key)) {
                     if (typeof obj[key] !== keys[key])
@@ -198,8 +198,8 @@ Messaging = (function (global) {
         var text = error.text;
         if (substitutions) {
             for (var i = 0; i < substitutions.length; i++) {
-                field = "{" + i + "}";
-                start = text.indexOf(field);
+                var field = "{" + i + "}";
+                var start = text.indexOf(field);
                 if (start > 0) {
                     var part1 = text.substring(0, start);
                     var part2 = text.substring(start + field.length);
@@ -239,7 +239,7 @@ Messaging = (function (global) {
      */
     var WireMessage = function (type, options) {
         this.type = type;
-        for (name in options) {
+        for (var name in options) {
             if (options.hasOwnProperty(name)) {
                 this[name] = options[name];
             }
@@ -255,8 +255,8 @@ Messaging = (function (global) {
          * of all the component parts
          */
 
-        remLength = 0;
-        topicStrLength = new Array();
+        var remLength = 0;
+        var topicStrLength = new Array();
 
         // if the message contains a messageIdentifier then we need two bytes for that
         if (this.messageIdentifier != undefined)
@@ -264,6 +264,7 @@ Messaging = (function (global) {
 
         switch (this.type) {
             // If this a Connect then we need to include 12 bytes for its header
+            
             case MESSAGE_TYPE.CONNECT:
                 remLength += MqttProtoIdentifier.length + 3;
                 remLength += UTF8Length(this.clientId) + 2;
@@ -284,7 +285,7 @@ Messaging = (function (global) {
             // Subscribe, Unsubscribe can both contain topic strings
             case MESSAGE_TYPE.SUBSCRIBE:
                 first |= 0x02; // Qos = 1;
-                for (var i = 0; i < this.topics.length; i++) {
+                for (i = 0; i < this.topics.length; i++) {
                     topicStrLength[i] = UTF8Length(this.topics[i]);
                     remLength += topicStrLength[i] + 2;
                 }
@@ -294,7 +295,7 @@ Messaging = (function (global) {
 
             case MESSAGE_TYPE.UNSUBSCRIBE:
                 first |= 0x02; // Qos = 1;
-                for (var i = 0; i < this.topics.length; i++) {
+                for (i = 0; i < this.topics.length; i++) {
                     topicStrLength[i] = UTF8Length(this.topics[i]);
                     remLength += topicStrLength[i] + 2;
                 }
@@ -304,7 +305,7 @@ Messaging = (function (global) {
                 if (this.payloadMessage.duplicate) first |= 0x08;
                 first = first |= (this.payloadMessage.qos << 1);
                 if (this.payloadMessage.retained) first |= 0x01;
-                destinationNameLength = UTF8Length(this.payloadMessage.destinationName);
+                var destinationNameLength = UTF8Length(this.payloadMessage.destinationName);
                 remLength += destinationNameLength + 2;
                 var payloadBytes = this.payloadMessage.payloadBytes;
                 remLength += payloadBytes.byteLength;
@@ -318,7 +319,7 @@ Messaging = (function (global) {
                 break;
 
             default:
-                ;
+                
         }
 
         // Now we can allocate a buffer for the message
@@ -399,7 +400,7 @@ Messaging = (function (global) {
 
             case MESSAGE_TYPE.UNSUBSCRIBE:
                 // UNSUBSCRIBE has a list of topic strings
-                for (var i = 0; i < this.topics.length; i++)
+                for (i = 0; i < this.topics.length; i++)
                     pos = writeString(this.topics[i], topicStrLength[i], byteStream, pos);
                 break;
 
@@ -421,7 +422,8 @@ Messaging = (function (global) {
         // Decode the remaining length (MBI format)
 
         var digit;
-        var remLength = 0;
+        // eslint-disable-next-line no-unused-vars
+        var remLength;
         var multiplier = 1;
         do {
             digit = input[pos++];
@@ -474,7 +476,7 @@ Messaging = (function (global) {
                 break;
 
             default:
-                ;
+                
         }
 
         return wireMessage;
@@ -546,6 +548,7 @@ Messaging = (function (global) {
      */
     function stringToUTF8(input, output, start) {
         var pos = start;
+        var lowCharCode;
         for (var i = 0; i < input.length; i++) {
             var charCode = input.charCodeAt(i);
 
@@ -574,7 +577,7 @@ Messaging = (function (global) {
                 output[pos++] = charCode >> 6 & 0x3F | 0x80;
                 output[pos++] = charCode & 0x3F | 0x80;
             }
-            ;
+            
         }
         return output;
     }
@@ -735,7 +738,7 @@ Messaging = (function (global) {
 
 
         // Load the local state, if any, from the saved version, only restore state relevant to this client.   	
-        for (key in localStorage)
+        for (var key in localStorage)
             if (key.indexOf("Sent:" + this._localKey) == 0
                 || key.indexOf("Received:" + this._localKey) == 0)
                 this.restore(key);
@@ -830,8 +833,7 @@ Messaging = (function (global) {
 
         var wireMessage = new WireMessage(MESSAGE_TYPE.UNSUBSCRIBE);
         wireMessage.topics = [filter];
-
-        if (unsubscribeOptions.onSuccess) {
+if (unsubscribeOptions.onSuccess) {
             wireMessage.callback = function () {
                 unsubscribeOptions.onSuccess({invocationContext: unsubscribeOptions.invocationContext});
             };
@@ -856,7 +858,7 @@ Messaging = (function (global) {
         if (!this.connected)
             throw new Error(format(ERROR.INVALID_STATE, ["not connected"]));
 
-        wireMessage = new WireMessage(MESSAGE_TYPE.PUBLISH);
+        var wireMessage = new WireMessage(MESSAGE_TYPE.PUBLISH);
         wireMessage.payloadMessage = message;
 
         if (message.qos > 0)
@@ -872,7 +874,7 @@ Messaging = (function (global) {
         if (!this.socket)
             throw new Error(format(ERROR.INVALID_STATE, ["not connecting or connected"]));
 
-        wireMessage = new WireMessage(MESSAGE_TYPE.DISCONNECT);
+        var wireMessage = new WireMessage(MESSAGE_TYPE.DISCONNECT);
 
         // Run the disconnected call back as soon as the message has been sent,
         // in case of a failure later on in the disconnect processing.
@@ -886,7 +888,7 @@ Messaging = (function (global) {
         if (this._traceBuffer !== null) {
             this._trace("Client.getTraceLog", new Date());
             this._trace("Client.getTraceLog in flight messages", this._sentMessages.length);
-            for (key in this._sentMessages)
+            for (var key in this._sentMessages)
                 this._trace("_sentMessages ", key, this._sentMessages[key]);
             for (key in this._receivedMessages)
                 this._trace("_receivedMessages ", key, this._receivedMessages[key]);
@@ -909,7 +911,7 @@ Messaging = (function (global) {
     ClientImpl.prototype._doConnect = function (host, port) {
         // When the socket is open, this client will send the CONNECT WireMessage using the saved parameters. 
         if (this.connectOptions.useSSL)
-            wsurl = ["wss://", host, ":", port, "/mqtt"].join("");
+            var wsurl = ["wss://", host, ":", port, "/mqtt"].join("");
         else
             wsurl = ["ws://", host, ":", port, "/mqtt"].join("");
         this.connected = false;
@@ -941,7 +943,7 @@ Messaging = (function (global) {
     };
 
     ClientImpl.prototype.store = function (prefix, wireMessage) {
-        storedMessage = {type: wireMessage.type, messageIdentifier: wireMessage.messageIdentifier, version: 1};
+        var storedMessage = {type: wireMessage.type, messageIdentifier: wireMessage.messageIdentifier, version: 1};
 
         switch (wireMessage.type) {
             case MESSAGE_TYPE.PUBLISH:
@@ -1096,7 +1098,7 @@ Messaging = (function (global) {
 
                 // If we have started using clean session then clear up the local state.
                 if (this.connectOptions.cleanSession) {
-                    for (key in this._sentMessages) {
+                    for (var key in this._sentMessages) {
                         var sentMessage = this._sentMessages[key];
                         localStorage.removeItem("Sent:" + this._localKey + sentMessage.messageIdentifier);
                     }
@@ -1127,18 +1129,18 @@ Messaging = (function (global) {
                 }
 
                 // Sort sentMessages into the original sent order.
-                var sequencedMessages = sequencedMessages.sort(function (a, b) {
+                sequencedMessages = sequencedMessages.sort(function (a, b) {
                     return a.sequence - b.sequence;
                 });
                 for (var i = 0, len = sequencedMessages.length; i < len; i++) {
-                    var sentMessage = sequencedMessages[i];
+                    sentMessage = sequencedMessages[i];
                     if (sentMessage.type == MESSAGE_TYPE.PUBLISH && sentMessage.pubRecReceived) {
                         var pubRelMessage = new WireMessage(MESSAGE_TYPE.PUBREL, {messageIdentifier: sentMessage.messageIdentifier});
                         this._schedule_message(pubRelMessage);
                     } else {
                         this._schedule_message(sentMessage);
                     }
-                    ;
+                    
                 }
 
                 // Execute the connectOptions.onSuccess callback if there is one.
@@ -1155,7 +1157,7 @@ Messaging = (function (global) {
                 break;
 
             case MESSAGE_TYPE.PUBACK:
-                var sentMessage = this._sentMessages[wireMessage.messageIdentifier];
+                sentMessage = this._sentMessages[wireMessage.messageIdentifier];
                 // If this is a re flow of a PUBACK after we have restarted receivedMessage will not exist.
                 if (sentMessage) {
                     delete this._sentMessages[wireMessage.messageIdentifier];
@@ -1166,18 +1168,18 @@ Messaging = (function (global) {
                 break;
 
             case MESSAGE_TYPE.PUBREC:
-                var sentMessage = this._sentMessages[wireMessage.messageIdentifier];
+                sentMessage = this._sentMessages[wireMessage.messageIdentifier];
                 // If this is a re flow of a PUBREC after we have restarted receivedMessage will not exist.
                 if (sentMessage) {
                     sentMessage.pubRecReceived = true;
-                    var pubRelMessage = new WireMessage(MESSAGE_TYPE.PUBREL, {messageIdentifier: wireMessage.messageIdentifier});
+                    pubRelMessage = new WireMessage(MESSAGE_TYPE.PUBREL, {messageIdentifier: wireMessage.messageIdentifier});
                     this.store("Sent:", sentMessage);
                     this._schedule_message(pubRelMessage);
                 }
                 break;
 
             case MESSAGE_TYPE.PUBREL:
-                var receivedMessage = this._receivedMessages[wireMessage.messageIdentifier];
+                receivedMessage = this._receivedMessages[wireMessage.messageIdentifier];
                 localStorage.removeItem("Received:" + this._localKey + wireMessage.messageIdentifier);
                 // If this is a re flow of a PUBREL after we have restarted receivedMessage will not exist.
                 if (receivedMessage) {
@@ -1185,14 +1187,14 @@ Messaging = (function (global) {
                     delete this._receivedMessages[wireMessage.messageIdentifier];
                 }
                 // Always flow PubComp, we may have previously flowed PubComp but the server lost it and restarted.
-                pubCompMessage = new WireMessage(MESSAGE_TYPE.PUBCOMP, {messageIdentifier: wireMessage.messageIdentifier});
+                var pubCompMessage = new WireMessage(MESSAGE_TYPE.PUBCOMP, {messageIdentifier: wireMessage.messageIdentifier});
                 this._schedule_message(pubCompMessage);
 
 
                 break;
 
             case MESSAGE_TYPE.PUBCOMP:
-                var sentMessage = this._sentMessages[wireMessage.messageIdentifier];
+                sentMessage = this._sentMessages[wireMessage.messageIdentifier];
                 delete this._sentMessages[wireMessage.messageIdentifier];
                 localStorage.removeItem("Sent:" + this._localKey + wireMessage.messageIdentifier);
                 if (this.onMessageDelivered)
@@ -1200,7 +1202,7 @@ Messaging = (function (global) {
                 break;
 
             case MESSAGE_TYPE.SUBACK:
-                var sentMessage = this._sentMessages[wireMessage.messageIdentifier];
+                sentMessage = this._sentMessages[wireMessage.messageIdentifier];
                 if (sentMessage) {
                     if (sentMessage.timeOut)
                         sentMessage.timeOut.cancel();
@@ -1212,7 +1214,7 @@ Messaging = (function (global) {
                 break;
 
             case MESSAGE_TYPE.UNSUBACK:
-                var sentMessage = this._sentMessages[wireMessage.messageIdentifier];
+                sentMessage = this._sentMessages[wireMessage.messageIdentifier];
                 if (sentMessage) {
                     if (sentMessage.timeOut)
                         sentMessage.timeOut.cancel();
@@ -1237,7 +1239,7 @@ Messaging = (function (global) {
             default:
                 this._disconnected(ERROR.INVALID_MQTT_MESSAGE_TYPE.code, format(ERROR.INVALID_MQTT_MESSAGE_TYPE, [wireMessage.type]));
         }
-        ;
+        
     };
 
     /** @ignore */
@@ -1288,7 +1290,7 @@ Messaging = (function (global) {
             default:
                 throw Error("Invaild qos=" + wireMmessage.payloadMessage.qos);
         }
-        ;
+        
     };
 
     /** @ignore */
@@ -1364,9 +1366,9 @@ Messaging = (function (global) {
                 else if (typeof arguments[i] === "undefined") this._traceBuffer.push(arguments[i]);
                 else this._traceBuffer.push("  " + JSON.stringify(arguments[i]));
             }
-            ;
+            
         }
-        ;
+        
     };
 
     /** @ignore */
@@ -1868,7 +1870,7 @@ Messaging = (function (global) {
             } else {
                 return payload;
             }
-            ;
+            
         };
 
         var destinationName = undefined;

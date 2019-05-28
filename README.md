@@ -114,10 +114,10 @@ git clone github.com/IBM/iot-mapping
 
 1. To deploy the application to IBM Cloud, we'll need to leverage the IBM Cloud CLI. Ensure the cli is installed using the prerequisites section above, and then run the following command to deploy the application
 ```
-bx cf push
+ibmcloud cf push
 ```
 
-2. To see the app and services created and configured for this Code Pattern, use the IBM Cloud dashboard, or run `bx cf apps` and `bx cf services` in the terminal. The app should be named `iot-mapping` with a unique suffix.
+2. To see the app and services created and configured for this Code Pattern, use the IBM Cloud dashboard, or run `ibmcloud cf apps` and `ibmcloud cf services` in the terminal. The app should be named `iot-mapping` with a unique suffix.
 
 ## 2. Deploy Application locally
 Install the IoT Mapping node packages by running `npm install` in the project root directory.
