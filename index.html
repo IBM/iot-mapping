@@ -603,17 +603,6 @@ var hackerList = new List('hacker-list', options);
 	}
 
 	var drawAssetPath = function( id ) {
-		// var firstpolyline = new L.Polyline( assets[id]['points'], {
-		// 		color: 'red',
-		// 		weight: 3,
-		// 		opacity: 0.5,
-		// 		smoothFactor: 0
-		// });
-		// firstpolyline
-		// assets[id]['marker'].setLatLng( assets[id]['points'][ assets[id]['points'].length - 1 ]  ).update();
-
-		// TODO, color of associated marker should change to match line
-		if (! assets[id]['path']) {
 			assets[id]['path'] = new L.Polyline( assets[id]['points'], {
 					// color: 'red',
 					color: "rgb(" + genRandomNums() + ")",
@@ -622,12 +611,8 @@ var hackerList = new List('hacker-list', options);
 					smoothFactor: 0
 			})
 			assets[id]['path'].addTo(mymap);
-		} else {
-			assets[id]['path'].addTo(mymap);
 		}
-		// remove polyline with
-		// mymap.remove(firstpolyline)
-	}
+
 	var drawAssetPaths = function() {
 
 		Object.keys(assets).map( (asset, asset_idx) => {
@@ -653,7 +638,7 @@ var hackerList = new List('hacker-list', options);
 			// 	console.log(row[nodeIdSelect.selectedIndex])
 			// 	console.error(error);
 			// }
-			console.log(row[nodeIdSelect.selectedIndex])
+			// console.log(row[nodeIdSelect.selectedIndex])
 			if (! assets[row[nodeIdSelect.selectedIndex]]) {
 				console.log("initializing new asset: " + row[nodeIdSelect.selectedIndex])
 				initTrackableAsset( row[nodeIdSelect.selectedIndex], row[nodeLatitudeSelect.selectedIndex], row[nodeLongitudeSelect.selectedIndex], row[nodeTimeSelect.selectedIndex])
@@ -674,15 +659,15 @@ var hackerList = new List('hacker-list', options);
 				assetKeys.map( (key, idx) => {
 					// console.log(assets[key]['points'].length)
 					pointLens.push(assets[key]['points'].length)
-					console.log("idx")
-					console.log(idx)
-					console.log(assetKeys.length)
-					console.log("pointLens")
-					console.log(pointLens)
+					// console.log("idx")
+					// console.log(idx)
+					// console.log(assetKeys.length)
+					// console.log("pointLens")
+					// console.log(pointLens)
 					if (idx == assetKeys.length - 1) {
-						console.log("extracting max")
+						// console.log("extracting max")
 						var maxLen = Math.max.apply( Math, pointLens)
-						console.log(maxLen)
+						// console.log(maxLen)
 						slider.setAttribute("max", maxLen )
 					}
 				})
@@ -712,10 +697,10 @@ var hackerList = new List('hacker-list', options);
 		}
 		slider.oninput = function() {
 			for (id in assets) {
-				console.log(id)
-				console.log(this.value)
+				// console.log(id)
+				// console.log(this.value)
 				if (assets[id]['points'][this.value]) {
-					console.log("updating " +  id + " to " + assets[id]['points'][this.value].toString())
+					// console.log("updating " +  id + " to " + assets[id]['points'][this.value].toString())
 					updateTrackableAsset( id, assets[id]['points'][this.value][0], assets[id]['points'][this.value][1], id)
 				}
 				if (assets[id]['timestamps'][this.value]) {
@@ -757,7 +742,9 @@ var hackerList = new List('hacker-list', options);
 				// 	// Render thumbnail.
 				// 	console.log(theFile)
 					console.log("parsing as csv")
-					var csv = event.originalTarget.result.split('\n')
+					// console.log(event.target.result)
+					var csv = event.target.result.split('\n')
+					// var csv = event.originalTarget.result.split('\n')
 					console.log("extracting headers")
 					headers = csv[0].split(',')
 					console.log(headers)
@@ -1045,20 +1032,12 @@ var hackerList = new List('hacker-list', options);
 	*/
 
 	var initTrackableAsset = function(id, long, lat, time, type = undefined, val = undefined) {
-		// long = 33.999891
-		// lat = -118.317536
-		// val = 5
-		// type = "sound"
-		// id = "node1"
 		console.log("initializing asset: " + id)
 		var node = {
 			marker: L.marker([long, lat]).addTo(mymap).bindPopup("<b>" + id +"</b>").openPopup(),
 			points: [ new L.LatLng(long, lat) ],
 			timestamps: [ time ]
 		}
-		// node.marker = L.marker([long, lat]).addTo(mymap).bindPopup("<b>LoRA Node A1</b><br />").openPopup();
-
-		// if associated sensor data included, create a circle showing sensor value. TODO, allow for multiple sensor value types
 		if (type) {
 			var node1 = Object.assign ({
 				circle: L.circle([long, lat], val, {
@@ -1141,16 +1120,6 @@ var hackerList = new List('hacker-list', options);
 
 
 function drawAnimalPaths( ) {
-
-	for (id in assets) {
-		console.log(id)
-		console.log(assets[id]['points'].length)
-		// if (slider.getAttribute("max") < assets[id]['points'].length ) {
-		// 	console.log("updating slider max to ")
-		// 	console.log(assets[id]['points'].length - 1)
-		//   slider.setAttribute("max", assets[id]['points'].length - 1)
-		// }
-	}
 
 	// slider.setAttribute("max", sampleSensorData.length - 1)
 	slider.oninput = function() {
